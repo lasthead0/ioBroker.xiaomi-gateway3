@@ -1,0 +1,187 @@
+<html>
+
+<head>
+    <!-- Load ioBroker scripts and styles-->
+    <link rel="stylesheet" type="text/css" href="../../css/adapter.css" />
+    <link rel="stylesheet" type="text/css" href="../../lib/css/materialize.css">
+
+    <script type="text/javascript" src="../../lib/js/jquery-3.2.1.min.js"></script>
+    <script type="text/javascript" src="../../socket.io/socket.io.js"></script>
+
+    <script type="text/javascript" src="../../js/translate.js"></script>
+    <script type="text/javascript" src="../../lib/js/materialize.js"></script>
+    <script type="text/javascript" src="../../js/adapter-settings.js"></script>
+
+    <!-- Load our own files -->
+    <script type="text/javascript" src="index_m.js"></script>
+    <link rel="stylesheet" type="text/css" href="index_m.css" />
+    <script type="text/javascript" src="words.js"></script>
+
+    <!-- <script type="text/javascript"></script> -->
+</head>
+
+<body>
+    <div class="m adapter-container">
+        <!-- <div class="row">
+            <div class="col s12 m4 l2">
+                <img src="xiaomi-gateway3.png" class="logo">
+            </div>
+        </div> -->
+
+        <div class="row navbar-fixed" style="height: 48px;">
+            <nav class="nav-extended">
+                <div class="nav-content">
+                    <ul class="tabs tabs-transparent">
+                        <li class="tab col s2"><a href="#tab-main" id="tab_main" class="translate tooltipped">Main</a></li>
+                        <li class="tab col s2"><a href="#tab-settings" id="tab_settings" class="translate tooltipped">Settings</a></li>
+                        <!-- <li class="tab col s2"><a href="#tab-devices" id="tab_devices" class="translate tooltipped">Devices</a></li> -->
+                    </ul>
+                </div>
+            </nav>
+        </div>
+        <div id="tabs" class="tabs-content row">
+            <div id="tab-main" class="col s12 page active">
+                <div class="row">
+                    <div class="col s12">
+                        <h6 class="title blue darken-1 translate" style="margin-top: 0px;">Xiaomi Cloud</h6>
+                        <div class="card grey lighten-5">
+                            <div class="card-content white-text">
+                                <div class="row">
+                                    <div class="col s12 m5 l3 input-field">
+                                        <input id="email" type="text" placeholder="" class="value"/>
+                                        <label class="translate" for="email">E-mail</label>
+                                    </div>
+                                    <div class="col s12 m3 l2 input-field">
+                                        <input id="password" type="password" placeholder="" class="value" size="5">
+                                        <label class="translate" for="password">Password</label>
+                                    </div>
+                                    <div class="col s12 m3 l2 input-field">
+                                        <select id="server" class="value">
+                                            <option value="" class="translate" disabled selected>Select server</option>
+                                            <option value="cn">China</option>
+                                            <option value="sg">Singapur</option>
+                                            <option value="de">Germany</option>
+                                            <option value="us">USA</option>
+                                            <option value="ru">Russia</option>
+                                        </select>
+                                        <label class="translate">Server</label>
+                                    </div>
+                                    <div class="col">
+                                        <a id="get-devices" class="waves-effect waves-light btn"><i class="material-icons right">cloud</i>get devices</a>
+                                    </div>
+                                    <div class="col">
+                                        <div id="loader1" class="loader hidden"> </div>
+                                    </div>
+                                </div>
+                                <div class="row">
+                                    <div class="hidden">
+                                        <input id="gatewaysList" type="text" class="value">
+                                    </div>
+                                    <div class="col s12 m9 l6 input-field">
+                                        <select id="selectedGateway" class="value">
+                                            <!-- <option value="{}" class="translate" disabled selected>Choose Gateway</option> -->
+                                        </select>
+                                        <label class="translate">Gateways from Xiaomi Cloud</label>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="row">
+                    <div class="col s12">
+                        <h6 class="title blue darken-1 translate" style="margin-top: 0px;">Xiaomi Gateway3</h6>
+                        <div class="card grey lighten-5">
+                            <div class="card-content white-text">
+                                <div class="row">
+                                    <div class="col s6 m4 l3 input-field">
+                                        <input id="token" type="text" placeholder="" class="value"/>
+                                        <label class="translate" for="token">Token</label>
+                                    </div>
+                                    <div class="col s6 m3 l2 input-field">
+                                        <input id="localip" type="text" placeholder="" class="value"/>
+                                        <label class="translate" for="localip">Local IP</label>
+                                    </div>
+                                    <div class="col">
+                                        <a id="ping-device" class="waves-effect waves-light btn"><i class="material-icons right">leak_add</i>Ping device</a>
+                                    </div>
+                                    <div class="col">
+                                        <a id="check-telnet" class="waves-effect waves-light btn"><i class="material-icons right">leak_add</i>Check telnet</a>
+                                    </div>
+                                    <div class="col">
+                                        <div class="loader hidden" id="loader2"> </div>
+                                    </div>
+                                </div>
+                                <div class="row">
+                                    <div class="col input-field" style="width: 90px;">
+                                        <select id="selectTelnetCmd">
+                                            <option value=0 class="translate" disabled selected>#</option>
+                                            <option value=1 class="translate">#1</option>
+                                            <option value=2 class="translate">#2</option>
+                                        </select>
+                                        <label class="translate" hidden>&nbsp;</label>
+                                    </div>
+                                    <div class="col s10 m10 l8 input-field">
+                                        <input id="telnetCmd" type="text" placeholder="" class="value" data-val=""/>
+                                        <label class="translate">Telnet open command</label>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div id="tab-settings" class="col s12 page">
+                <div class="row">
+                    <div class="col s12">
+                        <h6 class="title blue darken-1 translate" style="margin-top: 0px;">Adapter Settings</h6>
+                        <div class="card grey lighten-5">
+                            <div class="card-content">
+                                <div class="row">
+                                    <div class="col s6 m3 l2 input-field text-grey">
+                                        <input id="debugLog" type="checkbox" class="value filled-in"/>
+                                        <span class="translate">Debug log</span>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="row">
+                    <div class="col s12">
+                        <h6 class="title blue darken-1 translate" style="margin-top: 0px;">Gateway3 Settings</h6>
+                        <div class="card grey lighten-5">
+                            <div class="card-content">
+                                <div class="row">
+                                    <div class="col s6 m3 l2 input-field text-grey">
+                                        <input id="gwEnableTelnet" type="checkbox" class="value filled-in" value=true disabled=true/>
+                                        <span class="translate">Telnet enabled</span>
+                                    </div>
+                                    <div class="col s6 m3 l2 input-field text-grey">
+                                        <input id="gwEnablePublicMqtt" type="checkbox" class="value filled-in" value=true disabled=true/>
+                                        <span class="translate">Public MQTT enabled</span>
+                                    </div>
+                                    <div class="col s6 m3 l2 input-field text-grey">
+                                        <input id="gwLockFirmware" type="checkbox" class="value filled-in"/>
+                                        <span class="translate">Lock firmware</span>
+                                    </div>
+                                    <div class="col s6 m3 l2 input-field text-grey">
+                                        <input id="gwStopBuzzer" type="checkbox" class="value filled-in"/>
+                                        <span class="translate">Stop buzzer</span>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <!-- <div id="tab-devices" class="col s12 page">
+                <div id="devices" class="row">
+                    aa
+                </div>
+            </div> -->
+        </div>
+    </div>
+</body>
+
+</html>

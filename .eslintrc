@@ -1,0 +1,35 @@
+{
+    "env": {
+        "node": true,
+        "es6": true,
+        "mocha": true
+    },
+    "parser": "@babel/eslint-parser",
+    "parserOptions": {
+        "ecmaVersion": 2018,
+        "sourceType": "module",
+        "ecmaFeatures": {
+            "jsx": true,
+            "modules": true
+        }
+    },
+    "rules": {
+        "indent": ["error", 4, {"SwitchCase": 1, "MemberExpression": 1}],
+        "no-undef": ["error", {"typeof": true}],
+        "quotes": ["error", "single", {"allowTemplateLiterals": true}],
+        "semi": ["error", "always", {"omitLastInOneLineBlock": true}],
+        "arrow-parens": ["error", "as-needed"],
+        "no-empty": ["error", {"allowEmptyCatch": true}],
+        "curly": ["error", "multi-or-nest", "consistent"],
+        "keyword-spacing": ["error"],
+        "object-curly-spacing": ["error", "never"],
+        "array-bracket-spacing": ["error", "never"],
+        "brace-style": ["error", "1tbs", {"allowSingleLine": true}],
+        "padding-line-between-statements": [
+            "error",
+            {"blankLine": "always", "prev": ["const", "let", "var"], "next": "*"},
+            {"blankLine": "any", "prev": ["const", "let", "var"], "next": ["const", "let", "var"]},
+            {"blankLine": "always", "prev": "*", "next": ["return"]}
+        ]
+    }
+}

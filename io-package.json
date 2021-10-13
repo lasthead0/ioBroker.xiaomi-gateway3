@@ -1,0 +1,111 @@
+{
+    "common": {
+        "name": "xiaomi-gateway3",
+        "version": "0.0.1-alpha.0",
+        "title": "xiaomi-gateway3",
+        "titleLang": {
+            "en": "Xiaomi Gateway 3",
+            "de": "Xiaomi Gateway 3",
+            "ru": "Xiaomi Gateway 3",
+            "pt": "Xiaomi Gateway 3",
+            "nl": "Xiaomi Gateway 3",
+            "fr": "Xiaomi Gateway 3",
+            "it": "Xiaomi Gateway 3",
+            "es": "Xiaomi Gateway 3",
+            "pl": "Xiaomi Gateway 3",
+            "zh-cn": "Xiaomi Gateway 3"
+        },
+        "desc": {
+            "en": "Adapter for Xiaomi Gateway 3 integration",
+            "de": "Adapter für Xiaomi Gateway 3 Integration",
+            "ru": "Адаптер для интеграции Xiaomi Gateway 3",
+            "pt": "Adaptador para integração Xiaomi Gateway 3",
+            "nl": "Adapter voor Xiaomi Gateway 3-integratie",
+            "fr": "Adaptateur pour intégration Xiaomi Gateway 3",
+            "it": "Adattatore per integrazione Xiaomi Gateway 3",
+            "es": "Adaptador para la integración de Xiaomi Gateway 3",
+            "pl": "Adapter do integracji Xiaomi Gateway 3",
+            "zh-cn": "小米网关3集成适配器"
+        },
+        "authors": [
+            "Evgenii Abramov <john.abramov@gmail.com>"
+        ],
+        "keywords": [
+            "ioBroker",
+            "smarthome",
+            "xiaomi",
+            "xiaomi-gateway",
+            "zigbee"
+        ],
+        "stopBeforeUpdate": true,
+        "connectionType": "cloud",
+        "dataSource": "push",
+        "license": "MIT",
+        "platform": "Javascript/Node.js",
+        "icon": "xiaomi-gateway3.png",
+        "enabled": true,
+        "readme": "https://github.com/lasthead0/ioBroker.xiaomi-gateway3/blob/master/README.md",
+        "loglevel": "info",
+        "mode": "daemon",
+        "extIcon": "https://raw.githubusercontent.com/lasthead0/ioBroker.xiaomi-gateway3/master/admin/xiaomi-gateway3.png",
+        "type": "iot-systems",
+        "compact": true,
+        "materialize": true,
+        "messagebox": true,
+        "dependencies": [
+            {
+                "js-controller": ">=2.0.0"
+            }
+        ],
+        "news": {
+            "0.0.1-alpha.0": {
+                "en": "Initial release",
+                "de": "Erstveröffentlichung",
+                "ru": "Первый выпуск",
+                "pt": "lançamento inicial",
+                "nl": "Eerste uitgave",
+                "fr": "Première version",
+                "it": "Versione iniziale",
+                "es": "Versión inicial",
+                "pl": "Pierwsze wydanie",
+                "zh-cn": "初始发行"
+            }
+        }
+    },
+    "native": {
+        "email": "",
+        "password": "",
+        "server": "cn",
+        "token": "",
+        "localip": "",
+        "telnetCmd": "",
+        "debugLog": false,
+        "gwEnableTelnet": true,
+        "gwEnablePublicMqtt": true,
+        "gwLockFirmware": false,
+        "gwStopBuzzer": false
+    },
+    "encryptedNative": [
+        "email",
+        "password"
+    ],
+    "protectedNative": [
+        "email",
+        "password"
+    ],
+    "objects": [],
+    "instanceObjects": [
+        {
+            "_id": "info.connection",
+            "type": "state",
+            "common": {
+                "role": "indicator.connected",
+                "name": "If connected to Gateway",
+                "type": "boolean",
+                "read": true,
+                "write": false
+            },
+            "native": {}
+        }
+    ]
+}

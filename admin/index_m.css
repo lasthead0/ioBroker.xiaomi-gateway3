@@ -1,0 +1,60 @@
+/* You can delete those if you want. I just found them very helpful */
+* {
+    box-sizing: border-box
+}
+.m {
+    /* Don't cut off dropdowns! */
+    overflow: initial;
+}
+.m.adapter-container,
+.m.adapter-container > div.App {
+    /* Fix layout/scrolling issues with tabs */
+    height: 100%;
+    width: 100%;
+    position: relative;
+}
+
+/* The positioning for dropdown labels is messed up */
+/* .m .select-wrapper + label {
+    transform: none !important;
+} */
+
+label > i[title] {
+    /* Display the help cursor for the tooltip icons and fix their positioning */
+    cursor: help;
+    margin-left: 0.25em;
+}
+
+.dropdown-content {
+    /* Don't wrap text in dropdowns */
+    white-space: nowrap;
+}
+
+/* Add your styles here */
+.m.adapter-container .title {
+    border-radius: 2px;
+}
+
+.card-content .row {
+    margin-bottom: 0px;
+}
+
+.tabs-content > div > .row {
+    margin-bottom: 0px;
+}
+
+/* Loader classes */
+.loader {
+    border: 4px solid #b8d1f3;
+    /* Light grey */
+    border-top: 4px solid #3498db;
+    /* Blue */
+    border-radius: 50%;
+    width: 36px;
+    height: 36px;
+    animation: spin 2s linear infinite;
+}
+
+.hidden {
+    display: none;
+}
