@@ -50,8 +50,7 @@ You have several options to configure adapter and gatewey.
     Placeholder for the next version (at the beginning of the line):
     ### **WORK IN PROGRESS**
 -->
-
-### **WORK IN PROGRESS**
+### 0.0.1-alpha.0 (2021-10-13)
 * (Evgenii Abramov) Initial release
 
 ## License
