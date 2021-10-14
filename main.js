@@ -157,6 +157,8 @@ class XiaomiGateway3 extends utils.Adapter {
     /* Adapter 'unload' event handler */
     onUnload(callback) {
         try {
+            this.setState('info.connection', false, true);
+
             callback();
         } catch (e) {
             if (e)
