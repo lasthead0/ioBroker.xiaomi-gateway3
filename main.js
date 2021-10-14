@@ -213,7 +213,7 @@ class XiaomiGateway3 extends utils.Adapter {
 
         const context = Object.assign({},
             Object.keys(states).reduce((p, c) => {
-                const sn = c.split('.').splice(-1)[0];
+                const [sn,] = c.split('.').splice(-1);
 
                 return Object.assign({}, p, {[sn]: (states[c] || {})['val']});
             }, {}),
