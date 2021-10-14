@@ -159,6 +159,10 @@ class XiaomiGateway3 extends utils.Adapter {
         try {
             this.setState('info.connection', false, true);
 
+            for (let t of Object.values(this.timers))
+                clearTimeout(t);
+            this.#timers = undefined;
+
             callback();
         } catch (e) {
             if (e)
@@ -230,7 +234,9 @@ class XiaomiGateway3 extends utils.Adapter {
                     setter(
                         id,
                         async val => {await this.setStateAsync(`${id}.${k}`, val, true)},
-                        context
+                        context,
+                        this.#timers,
+                        this.logger.debug
                     );
                 };
             } else if (val != undefined) {
