@@ -15,8 +15,11 @@
 
 For now adapter is in very early development.
 - scanty documentation (but it will be supplemented)
-- it supports only Zigbee devices
+- supports only Zigbee devices (and tests needed)
 - ...
+
+## Thanks
+Big part of code is based on [AlexxIT](https://github.com/AlexxIT) project [XiaomiGateway3](https://github.com/AlexxIT/XiaomiGateway3)
 
 ## Xiaomi-gateway3 ioBroker adapter
 
