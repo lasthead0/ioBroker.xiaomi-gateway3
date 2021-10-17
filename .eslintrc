@@ -14,7 +14,16 @@
         }
     },
     "rules": {
-        "indent": ["error", 4, {"SwitchCase": 1, "MemberExpression": 1}],
+        "indent": [
+            "error",
+            4, 
+            {
+                "SwitchCase": 1, 
+                "MemberExpression": 1,
+                "FunctionExpression": {"body": 1, "parameters": 2},
+                "CallExpression": {"arguments": 1}
+            }
+        ],
         "no-undef": ["error", {"typeof": true}],
         "quotes": ["error", "single", {"allowTemplateLiterals": true}],
         "semi": ["error", "always", {"omitLastInOneLineBlock": true}],
@@ -28,8 +37,8 @@
         "padding-line-between-statements": [
             "error",
             {"blankLine": "always", "prev": ["const", "let", "var"], "next": "*"},
-            {"blankLine": "any", "prev": ["const", "let", "var"], "next": ["const", "let", "var"]},
-            {"blankLine": "always", "prev": "*", "next": ["return"]}
+            {"blankLine": "always", "prev": "*", "next": ["return"]},
+            {"blankLine": "any", "prev": ["const", "let", "var"], "next": ["const", "let", "var", "return"]}
         ]
     }
 }
