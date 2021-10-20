@@ -36,7 +36,7 @@ Adapter supports `Xiaomi Gateway 3 (ZNDMWG03LM and ZNDMWG02LM)` running on origi
 
 You can flash gateway with custom or stock firmware these versions: [wiki](https://github.com/AlexxIT/XiaomiGateway3/wiki).
 
-**!!Attantion:** Firmware versions lower than 1.4.6_0030 adapter not support and will not. Support of versions lower than v1.5.0_0026 not guaranteed.
+**!!Attantion:** Firmware versions lower than `1.4.6_0030` adapter not support and will not. Support of versions lower than `v1.5.0_0026` not guaranteed.
 
 ## Configuration
 
