@@ -38,7 +38,7 @@
             "zigbee"
         ],
         "stopBeforeUpdate": true,
-        "connectionType": "cloud",
+        "connectionType": "local",
         "dataSource": "push",
         "license": "MIT",
         "platform": "Javascript/Node.js",
