@@ -138,9 +138,13 @@
                         <div class="card grey lighten-5">
                             <div class="card-content">
                                 <div class="row">
-                                    <div class="col s6 m3 l2 input-field text-grey">
+                                    <div class="col input-field text-grey">
                                         <input id="debugLog" type="checkbox" class="value filled-in"/>
                                         <span class="translate">Debug log</span>
+                                    </div>
+                                    <div class="col input-field text-grey" style="margin-left: 12px;">
+                                        <input id="dLogMQTT" type="checkbox" class="value filled-in debugLog"/>
+                                        <span class="translate">logging MQTT</span>
                                     </div>
                                 </div>
                             </div>
@@ -153,19 +157,19 @@
                         <div class="card grey lighten-5">
                             <div class="card-content">
                                 <div class="row">
-                                    <div class="col s6 m3 l2 input-field text-grey">
+                                    <div class="col input-field text-grey">
                                         <input id="gwEnableTelnet" type="checkbox" class="value filled-in" value=true disabled=true/>
                                         <span class="translate">Telnet enabled</span>
                                     </div>
-                                    <div class="col s6 m3 l2 input-field text-grey">
+                                    <div class="col input-field text-grey" style="margin-left: 12px;">
                                         <input id="gwEnablePublicMqtt" type="checkbox" class="value filled-in" value=true disabled=true/>
                                         <span class="translate">Public MQTT enabled</span>
                                     </div>
-                                    <div class="col s6 m3 l2 input-field text-grey">
+                                    <div class="col input-field text-grey" style="margin-left: 12px;">
                                         <input id="gwLockFirmware" type="checkbox" class="value filled-in"/>
                                         <span class="translate">Lock firmware</span>
                                     </div>
-                                    <div class="col s6 m3 l2 input-field text-grey">
+                                    <div class="col input-field text-grey" style="margin-left: 12px;">
                                         <input id="gwStopBuzzer" type="checkbox" class="value filled-in"/>
                                         <span class="translate">Stop buzzer</span>
                                     </div>

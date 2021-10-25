@@ -80,6 +80,7 @@
         "localip": "",
         "telnetCmd": "",
         "debugLog": false,
+        "dLogMQTT": false,
         "gwEnableTelnet": true,
         "gwEnablePublicMqtt": true,
         "gwLockFirmware": false,

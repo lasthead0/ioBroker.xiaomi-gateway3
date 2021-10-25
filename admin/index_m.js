@@ -216,6 +216,16 @@ function load(settings, onChange) {
         if (M) M.FormSelect.init($selectedGateway);
     });
 
+    /* On 'debugLog' checkbox change */
+    $('.debugLog').prop('disabled', $('#debugLog').prop('checked') == false);
+    $('#debugLog').on('change', function() {
+        const val = $(this).prop('checked');
+
+        $('.debugLog').each(function() {
+            $(this).prop('disabled', !val);
+        });
+    });
+
     onChange(false);
 }
 
