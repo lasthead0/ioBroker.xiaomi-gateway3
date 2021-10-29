@@ -13,7 +13,11 @@ const Gateway3 = require('./lib/gateway3');
 class XiaomiGateway3 extends utils.Adapter {
     #mqttc = undefined;
     /* {error, debug} */
-    #_LOGGER = undefined;
+    #_LOGGER = {
+        'info': undefined,
+        'error': undefined,
+        'debug': undefined
+    };
 
     #timers = {};
 
@@ -39,13 +43,36 @@ class XiaomiGateway3 extends utils.Adapter {
 	    this.setState('info.connection', false, true);
 	    this.subscribeStates('*');
 
-        /* Adapter logger */
-        const {debugLog} = this.config;
+        /* Adapter logging options */
+        const {debugLog, dLogMQTT} = this.config;
 
+        /* Adapter logger */
         this.logger = {
             'info': this.log.info,
             'error': this.log.error,
-            'debug': (d => d ? this.log.debug : () => {})(debugLog)
+            'debug': (([d, ...log]) => {
+                if (d) {
+                    const [MQTT,] = log;
+
+                    return msg => {
+                        if (typeof msg === 'string') {
+                            const logs = {MQTT};
+                            const allowed = [(msg.match(/^\([\w]+\)/g) || [''])[0].match(/[A-Z]+/g)][0];
+
+                            if (allowed != undefined) {
+                                if (logs[allowed] == true)
+                                    this.log.debug(msg);
+                            } else {
+                                this.log.debug(msg);
+                            }
+                        } else {
+                            this.log.debug(msg);
+                        }
+                    };
+                } else {
+                    return () => {};
+                }
+            })([debugLog, dLogMQTT])
         };
 
         /* */
@@ -180,34 +207,25 @@ class XiaomiGateway3 extends utils.Adapter {
 
     /* MQTT on 'message' event callback */
     async _onMqttMessage(topic, msg) {
-        /**
-         * TODO: MQTT messages debug enable option, maybe
-         * this.logger.debug(`(MQTT) ${topic} ${msg}`);
-         */
+        this.logger.debug(`(_MQTT_) ${topic} ${msg}`);
+        
+        /* */
         if (topic.match(/^zigbee\/send$/gm)) {
-            this.gateway3.processMessageZigbee(JSON.parse(msg), this._cbProcessMessage.bind(this));
+            this.gateway3.processMessageZigbee(JSON.parse(msg), this._cbProcessMessageZigbee.bind(this));
+        }  else if (topic.match(/^log\/ble$/gm)) {
+            this.gateway3.processMessageBle(JSON.parse(msg), this._cbProcessMessageBle.bind(this));
         }  else if (topic.match(/^log\/miio$/gm)) {
-            // 
-        }  else if (topic.match(/^gw3\/raw$/gm)) {
-            //
-        } else if (topic.match(/^log\/z3$/gm)) {
-            //
+            // TODO: or not TODO:
         } else if (topic.match(/\/heartbeat$/gm)) {
+            //TODO: or not TODO:
             // Gateway heartbeats (don't handle for now)
         } else if (topic.match(/\/(MessageReceived|devicestatechange)$/gm)) {
-            //
+            // TODO: or not TODO:
         }
-        // # read only retained ble
-        // elif topic.startswith('ble') and msg.retain:
-        //     payload = json.loads(msg.payload)
-        //     self.process_ble_retain(topic[4:], payload)
-
-        // elif self.pair_model and topic.endswith('/commands'):
-        //     self.process_pair(msg.payload)
     }
 
     /* */
-    async _cbProcessMessage(mac, payload) {
+    async _cbProcessMessageZigbee(mac, payload) {
         const id = String(mac).substr(2);
         const states = await this.getStatesAsync(`${id}*`);
 
@@ -235,8 +253,7 @@ class XiaomiGateway3 extends utils.Adapter {
                         id,
                         async val => {await this.setStateAsync(`${id}.${k}`, val, true)},
                         context,
-                        this.#timers,
-                        this.logger.debug
+                        this.#timers
                     );
                 };
             } else if (val != undefined) {
@@ -249,6 +266,30 @@ class XiaomiGateway3 extends utils.Adapter {
             if (typeof sf === 'function') sf();
     }
 
+    /* */
+    async _cbProcessMessageBle(mac, payload) {
+        const id = String(mac).substr(2);
+
+        /**
+         * Have to try create Object here because I don't know specs for all bluetooth devices 
+         * and can't create needed objects in _cbFindOrCreateDevice
+         * TODO: FIXME:
+         */
+        for (let spec of Object.keys(payload)) {
+            await this.setObjectNotExistsAsync(`${id}.${spec}`, iob.normalizeObject({
+                '_id': `${this.namespace}.${id}.${spec}`,
+                'type': 'state',
+                'native': {},
+                'common': {}
+            }));
+
+            const val = payload[spec];
+            
+            if (val != undefined)
+                await this.setStateAsync(`${id}.${spec}`, iob.normalizeStateVal(spec, val), true);
+        }
+    }
+
     /*
         Callback function which called by gateway initialization.
         It take device and create objects and states if needed.
@@ -256,7 +297,7 @@ class XiaomiGateway3 extends utils.Adapter {
     async _cbFindOrCreateDevice(_device) {
         if (_device == undefined) return;
 
-        const {mac, name, specs, init} = _device;
+        const {mac, model, specs, init} = _device;
         const objectId = String(mac).substr(2);
 
         /* set device (iob object) */
@@ -267,8 +308,8 @@ class XiaomiGateway3 extends utils.Adapter {
                 'id': objectId
             },
             'common': {
-                'name': name,
-                'type': name
+                'name': model,
+                'type': model
             }
         });
 
