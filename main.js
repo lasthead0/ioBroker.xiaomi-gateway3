@@ -89,7 +89,7 @@ class XiaomiGateway3 extends utils.Adapter {
             gwEnableTelnet,
             gwEnablePublicMqtt,
             gwLockFirmware,
-            gwStopBuzzer
+            gwDisableBuzzer
         } = this.config;
 
         this.gateway3 = new Gateway3(localip || '127.0.0.1', token || crypto.randomBytes(32).toString('hex'));
@@ -100,7 +100,7 @@ class XiaomiGateway3 extends utils.Adapter {
             gwEnableTelnet,
             gwEnablePublicMqtt,
             gwLockFirmware,
-            gwStopBuzzer
+            gwDisableBuzzer
         };
 
         const [enabledTelnet, enabledMqtt] = await this.gateway3.initialize(gwConfig, this._cbFindOrCreateDevice.bind(this));
