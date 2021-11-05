@@ -43,6 +43,12 @@ label > i[title] {
     margin-bottom: 0px;
 }
 
+h6.title {
+    display: -webkit-flex;
+    display: flex;
+    align-items: center;
+}
+
 /* Loader classes */
 .loader {
     border: 4px solid #b8d1f3;
