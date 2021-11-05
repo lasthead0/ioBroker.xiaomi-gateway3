@@ -55,8 +55,13 @@ You have several options to configure adapter and gatewey.
 
 <img src="static/configuration-settings.png">
 
+### Adapter settings
+
+- [x] __Debug output (to stete)__<br/>
+Adapter will doing output some debug info into state for each device.
 
 ### Basic Gateway3 settings
+
 - [x] __Telnet enabled__<br/>
 Enabled by default and have to stay enabled. Here just for info.
 
