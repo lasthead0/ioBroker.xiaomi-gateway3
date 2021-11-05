@@ -84,7 +84,8 @@
         "gwEnableTelnet": true,
         "gwEnablePublicMqtt": true,
         "gwLockFirmware": false,
-        "gwStopBuzzer": false
+        "gwDisableBuzzer": false,
+        "gwInMemory": false
     },
     "encryptedNative": [
         "email",
