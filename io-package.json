@@ -81,6 +81,7 @@
         "telnetCmd": "",
         "debugLog": false,
         "dLogMQTT": false,
+        "debugOutput": false,
         "gwEnableTelnet": true,
         "gwEnablePublicMqtt": true,
         "gwLockFirmware": false,
