@@ -210,12 +210,20 @@ class XiaomiGateway3 extends utils.Adapter {
     /* MQTT on 'message' event callback */
     async _onMqttMessage(topic, msg) {
         this.logger.debug(`(_MQTT_) ${topic} ${msg}`);
+
+        const {debugOutput} = this.config;
         
         /* */
         if (topic.match(/^zigbee\/send$/gm)) {
-            this.gateway3.processMessageZigbee(JSON.parse(msg), this._cbProcessMessageZigbee.bind(this));
+            if (debugOutput)
+                this.gateway3.processMessageZigbee(JSON.parse(msg), this._cbProcessMessageZigbee.bind(this), this._cbDebugOutput.bind(this));
+            else 
+                this.gateway3.processMessageZigbee(JSON.parse(msg), this._cbProcessMessageZigbee.bind(this));
         }  else if (topic.match(/^log\/ble$/gm)) {
-            this.gateway3.processMessageBle(JSON.parse(msg), this._cbProcessMessageBle.bind(this));
+            if (debugOutput)
+                this.gateway3.processMessageBle(JSON.parse(msg), this._cbProcessMessageBle.bind(this), this._cbDebugOutput.bind(this));
+            else
+                this.gateway3.processMessageBle(JSON.parse(msg), this._cbProcessMessageBle.bind(this));
         }  else if (topic.match(/^log\/miio$/gm)) {
             // TODO: or not TODO:
         } else if (topic.match(/\/heartbeat$/gm)) {
@@ -292,6 +300,34 @@ class XiaomiGateway3 extends utils.Adapter {
         }
     }
 
+    /* Callback for debug output purpose */
+    async _cbDebugOutput(mac, payload) {
+        const id = String(mac).substr(2);
+        const states = await this.getStatesAsync(`${id}.debug_output`);
+
+        try {
+            const debugOutputStateVal = JSON.parse((states[`${this.namespace}.${id}.debug_output`] || {'val': '\{\}'}).val);
+            const debugOutputPayloadVal = Object.assign({}, debugOutputStateVal, {
+                'zigbeeProperties': payload.zigbeeProperties != undefined ?
+                    [].concat(debugOutputStateVal.zigbeeProperties || [], payload.zigbeeProperties)
+                        .filter((el, idx, arr) => arr.indexOf(el) === idx) :
+                    undefined,
+                'bleProperties': payload.bleProperties != undefined ?
+                    [].concat(debugOutputStateVal.bleProperties || [], payload.bleProperties)
+                        .filter((el, idx, arr) => arr.indexOf(el) === idx) :
+                    undefined
+            });
+
+            await this.setStateAsync(
+                `${id}.debug_output`,
+                JSON.stringify(debugOutputPayloadVal),
+                true
+            );
+        } catch (e) {
+            this.logger.error(e.stack);
+        }
+    }
+
     /*
         Callback function which called by gateway initialization.
         It take device and create objects and states if needed.
@@ -317,7 +353,7 @@ class XiaomiGateway3 extends utils.Adapter {
 
         /* */
         for (let spec of specs) {
-            /* create state object if it not exist */
+            /* create state object if it is not exist */
             await this.setObjectNotExistsAsync(`${objectId}.${spec}`, iob.normalizeObject({
                 '_id': `${this.namespace}.${objectId}.${spec}`,
                 'type': 'state',
@@ -325,11 +361,30 @@ class XiaomiGateway3 extends utils.Adapter {
                 'common': {}
             }));
             
-            /* set init state value if it exist */
+            /* set init state value if it is exist */
             const val = init[spec];
             
             if (val != undefined)
                 await this.setStateAsync(`${objectId}.${spec}`, iob.normalizeStateVal(spec, val), true);
+        }
+
+        /* State for debug output purpose */
+        const {debugOutput} = this.config;
+
+        if (debugOutput) {
+            /* create state object for debug outout if it is not exist */
+            await this.setObjectNotExistsAsync(`${objectId}.debug_output`, {
+                '_id': `${this.namespace}.${objectId}.debug_output`,
+                'type': 'state',
+                'native': {},
+                'common': {
+                    'role': 'state',
+                    'name': 'Debug output',
+                    'type': 'string',
+                    'read': true,
+                    'write': false
+                }
+            });
         }
     }
 
