@@ -11,20 +11,19 @@
 
 <!-- [![NPM](https://nodei.co/npm/iobroker.xiaomi-gateway3.png?downloads=true)](https://nodei.co/npm/iobroker.xiaomi-gateway3/) -->
 
-## Early Alpha version
-
-For now adapter is in very early development.
-- scanty documentation (but it will be supplemented)
-- supports only Zigbee devices (and tests needed)
-- ...
-
-## Thanks
-Big part of code is based on [AlexxIT](https://github.com/AlexxIT) project [XiaomiGateway3](https://github.com/AlexxIT/XiaomiGateway3)
-
 ## Xiaomi-gateway3 ioBroker adapter
 
 This adapter allow ioBroker to communicate with Xiaomi Gateway 3 and use it to control Xiaomi devices.
 Adapter communicates with gateway over MQTT protocol (it connects to build-in MQTT broker). However you have to pair your gateway and devices by Mi Home (Cloud).
+
+## Early version
+
+Adapter is in development stage, for now. But already has ready to go functionality.
+
+For successful adapter development it needs community help mostly in tests adapter and devices.
+
+## Thanks
+Big part of code is based on and rewrote from [AlexxIT](https://github.com/AlexxIT) project [XiaomiGateway3](https://github.com/AlexxIT/XiaomiGateway3)
 
 ## Hardware and limits
 
@@ -36,19 +35,44 @@ Adapter supports `Xiaomi Gateway 3 (ZNDMWG03LM and ZNDMWG02LM)` running on origi
 
 You can flash gateway with custom or stock firmware these versions: [wiki](https://github.com/AlexxIT/XiaomiGateway3/wiki).
 
-**!!Attantion:** Firmware versions lower than `1.4.7_0000` adapter not support and will not. Support of versions lower than `v1.5.0_0026` not guaranteed.
+__*!!Attantion:*__ Firmware versions lower than `1.4.7_0000` adapter not support and will not. Support of versions lower than `v1.5.0_0026` not guaranteed.
 
 ## Configuration
 
-To connect a gateway you need get ip and token of gateway. You can do this manually or from cloud. Also you have to chose telnet open command (in most cases option #2).
-You can test connection and telnet by buttons.
+To connect a gateway you need get IP and TOKEN of gateway. You can do this manually or from cloud.
+
+__*!!Attantion: There is issue with getting devices from cloud. I didn't get yet is this issue in code or with cloud, however you should try to get (to press button) devices several times, for now.*__
+
+Also you have to chose telnet open command (in most cases option #2). You can test connection and telnet by buttons.
+
+*Ping here not actually ping. It is more check of device availability.*
 
 <img src="static/configuration-main.png">
+
+<br/>
 
 You have several options to configure adapter and gatewey.
 
 <img src="static/configuration-settings.png">
 
+
+### Basic Gateway3 settings
+- [x] __Telnet enabled__<br/>
+Enabled by default and have to stay enabled. Here just for info.
+
+- [x] __Public MQTT enabled__<br/>
+Enabled by default and have to stay enabled. Here just for info.
+
+- [x] __Lock firmware__<br/>
+Set true (or false) to disable (or enable) possibility to upgrade gateway firmware.
+
+- [x] __Disable buzzer__<br/>
+Set true to disable annoying buzzer signals or false to enable all signals.
+
+### Advanced Gateway3 settings
+
+- [x] __Storage in memory (Beta)__ <br/>
+Move devices DB files to memory. This can improve work zigbee and bluetooth devices. __*But can occur losing some data. Use on your own risk.*__
 
 ## Changelog
 <!--
