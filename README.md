@@ -16,14 +16,25 @@
 This adapter allow ioBroker to communicate with Xiaomi Gateway 3 and use it to control Xiaomi devices.
 Adapter communicates with gateway over MQTT protocol (it connects to build-in MQTT broker). However you have to pair your gateway and devices by Mi Home (Cloud).
 
+
 ## Early version
 
 Adapter is in development stage, for now. But already has ready to go functionality.
 
 For successful adapter development it needs community help mostly in tests adapter and devices.
 
+
 ## Thanks
+
 Big part of code is based on and rewrote from [AlexxIT](https://github.com/AlexxIT) project [XiaomiGateway3](https://github.com/AlexxIT/XiaomiGateway3)
+
+
+## How you can help?
+
+First of all, you can simply install adapter, use it and report of any issues.
+
+Besides, if you have a lot of different devices you can help to improve they support by enable option `Debug output (to state)`  (see below) and give me debug output after few days collecting debug data.
+
 
 ## Hardware and limits
 
@@ -36,6 +47,7 @@ Adapter supports `Xiaomi Gateway 3 (ZNDMWG03LM and ZNDMWG02LM)` running on origi
 You can flash gateway with custom or stock firmware these versions: [wiki](https://github.com/AlexxIT/XiaomiGateway3/wiki).
 
 __*!!Attantion:*__ Firmware versions lower than `1.4.7_0000` adapter not support and will not. Support of versions lower than `v1.5.0_0026` not guaranteed.
+
 
 ## Configuration
 
@@ -79,6 +91,7 @@ Set true to disable annoying buzzer signals or false to enable all signals.
 - [x] __Storage in memory (Beta)__ <br/>
 Move devices DB files to memory. This can improve work zigbee and bluetooth devices. __*But can occur losing some data. Use on your own risk.*__
 
+
 ## Changelog
 <!--
     Placeholder for the next version (at the beginning of the line):
@@ -86,6 +99,7 @@ Move devices DB files to memory. This can improve work zigbee and bluetooth devi
 -->
 ### 0.0.1-alpha.0 (2021-10-13)
 * (Evgenii Abramov) Initial release
+
 
 ## License
 MIT License
