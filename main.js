@@ -307,14 +307,16 @@ class XiaomiGateway3 extends utils.Adapter {
 
         try {
             const debugOutputStateVal = JSON.parse((states[`${this.namespace}.${id}.debug_output`] || {'val': '\{\}'}).val);
-            const debugOutputPayloadVal = Object.assign({}, debugOutputStateVal, {
+            const debugOutputPayloadVal = Object.assign({}, debugOutputStateVal, payload, {
                 'zigbeeProperties': payload.zigbeeProperties != undefined ?
                     [].concat(debugOutputStateVal.zigbeeProperties || [], payload.zigbeeProperties)
-                        .filter((el, idx, arr) => arr.indexOf(el) === idx) :
+                        .filter((el, idx, arr) => arr.indexOf(el) === idx)
+                        .sort((a, b) => String(a).localeCompare(String(b), 'en-US-u-kn-true')) :
                     undefined,
                 'bleProperties': payload.bleProperties != undefined ?
                     [].concat(debugOutputStateVal.bleProperties || [], payload.bleProperties)
-                        .filter((el, idx, arr) => arr.indexOf(el) === idx) :
+                        .filter((el, idx, arr) => arr.indexOf(el) === idx)
+                        .sort((a, b) => String(a).localeCompare(String(b), 'en-US-u-kn-true')) :
                     undefined
             });
 
