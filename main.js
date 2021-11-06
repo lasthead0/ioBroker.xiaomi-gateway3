@@ -216,14 +216,14 @@ class XiaomiGateway3 extends utils.Adapter {
         /* */
         if (topic.match(/^zigbee\/send$/gm)) {
             if (debugOutput)
-                this.gateway3.processMessageZigbee(JSON.parse(msg), this._cbProcessMessageZigbee.bind(this), this._cbDebugOutput.bind(this));
+                this.gateway3.processMessageZigbee(JSON.parse(msg), this._cbProcessMessage.bind(this), this._cbDebugOutput.bind(this));
             else 
-                this.gateway3.processMessageZigbee(JSON.parse(msg), this._cbProcessMessageZigbee.bind(this));
+                this.gateway3.processMessageZigbee(JSON.parse(msg), this._cbProcessMessage.bind(this));
         }  else if (topic.match(/^log\/ble$/gm)) {
             if (debugOutput)
-                this.gateway3.processMessageBle(JSON.parse(msg), this._cbProcessMessageBle.bind(this), this._cbDebugOutput.bind(this));
+                this.gateway3.processMessageBle(JSON.parse(msg), this._cbProcessMessage.bind(this), this._cbDebugOutput.bind(this));
             else
-                this.gateway3.processMessageBle(JSON.parse(msg), this._cbProcessMessageBle.bind(this));
+                this.gateway3.processMessageBle(JSON.parse(msg), this._cbProcessMessage.bind(this));
         }  else if (topic.match(/^log\/miio$/gm)) {
             // TODO: or not TODO:
         } else if (topic.match(/\/heartbeat$/gm)) {
@@ -235,7 +235,7 @@ class XiaomiGateway3 extends utils.Adapter {
     }
 
     /* */
-    async _cbProcessMessageZigbee(mac, payload) {
+    async _cbProcessMessage(mac, payload) {
         const id = String(mac).substr(2);
         const states = await this.getStatesAsync(`${id}*`);
 
@@ -271,16 +271,7 @@ class XiaomiGateway3 extends utils.Adapter {
             }
         });
 
-        /* call states setters */
-        for (let sf of funcs)
-            if (typeof sf === 'function') sf();
-    }
-
-    /* */
-    async _cbProcessMessageBle(mac, payload) {
-        const id = String(mac).substr(2);
-
-        /**
+        /*
          * Have to try create Object here because I don't know specs for all bluetooth devices 
          * and can't create needed objects in _cbFindOrCreateDevice
          * TODO: FIXME:
@@ -292,12 +283,11 @@ class XiaomiGateway3 extends utils.Adapter {
                 'native': {},
                 'common': {}
             }));
-
-            const val = payload[spec];
-            
-            if (val != undefined)
-                await this.setStateAsync(`${id}.${spec}`, iob.normalizeStateVal(spec, val), true);
         }
+        
+        /* call states setters */
+        for (let sf of funcs)
+            if (typeof sf === 'function') sf();
     }
 
     /* Callback for debug output purpose */
