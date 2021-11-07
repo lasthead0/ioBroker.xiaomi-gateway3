@@ -239,6 +239,10 @@ class XiaomiGateway3 extends utils.Adapter {
         const id = String(mac).substr(2);
         const states = await this.getStatesAsync(`${id}*`);
 
+        /*
+         * Context build from current device states (and their values)
+         * and new states from payload (and their values).
+         */
         const context = Object.assign({},
             Object.keys(states).reduce((p, c) => {
                 const [sn,] = c.split('.').splice(-1);
@@ -252,23 +256,14 @@ class XiaomiGateway3 extends utils.Adapter {
             }, {})
         );
 
-        /* create array of states setters functions */
-        const funcs = Object.keys(payload).map(k => {
-            const val = context[k];
-            const setter = iob.getSetter(k);
-
-            if (setter != undefined) {
-                return async () => {
-                    setter(
-                        id,
-                        async val => {await this.setStateAsync(`${id}.${k}`, val, true)},
-                        context,
-                        this.#timers
-                    );
-                };
-            } else if (val != undefined) {
-                return async () => {await this.setStateAsync(`${id}.${k}`, val, true)};
-            }
+        /* Create array of states setters functions */
+        const funcs = Object.keys(payload).map(state => {
+            return iob.stateSetter(state)(
+                id,
+                async val => {await this.setStateAsync(`${id}.${state}`, val, true)},
+                context,
+                this.#timers
+            );
         });
 
         /*
@@ -285,7 +280,7 @@ class XiaomiGateway3 extends utils.Adapter {
             }));
         }
         
-        /* call states setters */
+        /* Call states setters */
         for (let sf of funcs)
             if (typeof sf === 'function') sf();
     }
