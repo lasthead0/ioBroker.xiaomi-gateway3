@@ -7,7 +7,7 @@ const crypto = require('crypto');
 const mqtt = require('mqtt');
 /* */
 const {MiioHelper, Gateway3Helper, ioBrokerHelper: iob} = require('./lib/helpers');
-const XiaomiCloud = require('ioBroker.xiaomi-gateway3/lib/xiaomiCloud');
+const XiaomiCloud = require('./lib/xiaomiCloud');
 const Gateway3 = require('./lib/gateway3');
 
 class XiaomiGateway3 extends utils.Adapter {
