@@ -272,12 +272,15 @@ class XiaomiGateway3 extends utils.Adapter {
          * TODO: FIXME:
          */
         for (let spec of Object.keys(payload)) {
-            await this.setObjectNotExistsAsync(`${id}.${spec}`, iob.normalizeObject({
-                '_id': `${this.namespace}.${id}.${spec}`,
-                'type': 'state',
-                'native': {},
-                'common': {}
-            }));
+            await this.setObjectNotExistsAsync(`${id}.${spec}`, Object.assign({},
+                {
+                    '_id': `${this.namespace}.${id}.${spec}`,
+                    'type': 'state',
+                    'native': {},
+                    'common': {}
+                },
+                iob.normalizeStateObject(spec)
+            ));
         }
         
         /* Call states setters */
@@ -341,12 +344,15 @@ class XiaomiGateway3 extends utils.Adapter {
         /* */
         for (let spec of specs) {
             /* create state object if it is not exist */
-            await this.setObjectNotExistsAsync(`${objectId}.${spec}`, iob.normalizeObject({
-                '_id': `${this.namespace}.${objectId}.${spec}`,
-                'type': 'state',
-                'native': {},
-                'common': {}
-            }));
+            await this.setObjectNotExistsAsync(`${objectId}.${spec}`, Object.assign({},
+                {
+                    '_id': `${this.namespace}.${objectId}.${spec}`,
+                    'type': 'state',
+                    'native': {},
+                    'common': {}
+                },
+                iob.normalizeStateObject(spec)
+            ));
             
             /* set init state value if it is exist */
             const val = init[spec];
