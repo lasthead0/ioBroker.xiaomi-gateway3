@@ -1,114 +1,126 @@
 {
-    "common": {
-        "name": "xiaomi-gateway3",
-        "version": "0.0.1-alpha.0",
-        "title": "xiaomi-gateway3",
-        "titleLang": {
-            "en": "Xiaomi Gateway 3",
-            "de": "Xiaomi Gateway 3",
-            "ru": "Xiaomi Gateway 3",
-            "pt": "Xiaomi Gateway 3",
-            "nl": "Xiaomi Gateway 3",
-            "fr": "Xiaomi Gateway 3",
-            "it": "Xiaomi Gateway 3",
-            "es": "Xiaomi Gateway 3",
-            "pl": "Xiaomi Gateway 3",
-            "zh-cn": "Xiaomi Gateway 3"
-        },
-        "desc": {
-            "en": "Adapter for Xiaomi Gateway 3 integration",
-            "de": "Adapter für Xiaomi Gateway 3 Integration",
-            "ru": "Адаптер для интеграции Xiaomi Gateway 3",
-            "pt": "Adaptador para integração Xiaomi Gateway 3",
-            "nl": "Adapter voor Xiaomi Gateway 3-integratie",
-            "fr": "Adaptateur pour intégration Xiaomi Gateway 3",
-            "it": "Adattatore per integrazione Xiaomi Gateway 3",
-            "es": "Adaptador para la integración de Xiaomi Gateway 3",
-            "pl": "Adapter do integracji Xiaomi Gateway 3",
-            "zh-cn": "小米网关3集成适配器"
-        },
-        "authors": [
-            "Evgenii Abramov <john.abramov@gmail.com>"
-        ],
-        "keywords": [
-            "ioBroker",
-            "smarthome",
-            "xiaomi",
-            "xiaomi-gateway",
-            "zigbee"
-        ],
-        "stopBeforeUpdate": true,
-        "connectionType": "local",
-        "dataSource": "push",
-        "license": "MIT",
-        "platform": "Javascript/Node.js",
-        "icon": "xiaomi-gateway3.png",
-        "enabled": true,
-        "readme": "https://github.com/lasthead0/ioBroker.xiaomi-gateway3/blob/master/README.md",
-        "loglevel": "info",
-        "mode": "daemon",
-        "extIcon": "https://raw.githubusercontent.com/lasthead0/ioBroker.xiaomi-gateway3/master/admin/xiaomi-gateway3.png",
-        "type": "iot-systems",
-        "compact": true,
-        "materialize": true,
-        "messagebox": true,
-        "dependencies": [
-            {
-                "js-controller": ">=2.0.0"
-            }
-        ],
-        "news": {
-            "0.0.1-alpha.0": {
-                "en": "Initial release",
-                "de": "Erstveröffentlichung",
-                "ru": "Первый выпуск",
-                "pt": "lançamento inicial",
-                "nl": "Eerste uitgave",
-                "fr": "Première version",
-                "it": "Versione iniziale",
-                "es": "Versión inicial",
-                "pl": "Pierwsze wydanie",
-                "zh-cn": "初始发行"
-            }
-        }
+  "common": {
+    "name": "xiaomi-gateway3",
+    "version": "0.1.0",
+    "title": "xiaomi-gateway3",
+    "titleLang": {
+      "en": "Xiaomi Gateway 3",
+      "de": "Xiaomi Gateway 3",
+      "ru": "Xiaomi Gateway 3",
+      "pt": "Xiaomi Gateway 3",
+      "nl": "Xiaomi Gateway 3",
+      "fr": "Xiaomi Gateway 3",
+      "it": "Xiaomi Gateway 3",
+      "es": "Xiaomi Gateway 3",
+      "pl": "Xiaomi Gateway 3",
+      "zh-cn": "Xiaomi Gateway 3"
     },
-    "native": {
-        "email": "",
-        "password": "",
-        "server": "cn",
-        "token": "",
-        "localip": "",
-        "telnetCmd": "",
-        "debugLog": false,
-        "dLogMQTT": false,
-        "debugOutput": false,
-        "gwEnableTelnet": true,
-        "gwEnablePublicMqtt": true,
-        "gwLockFirmware": false,
-        "gwDisableBuzzer": false,
-        "gwInMemory": false
+    "desc": {
+      "en": "Adapter for Xiaomi Gateway 3 integration",
+      "de": "Adapter für Xiaomi Gateway 3 Integration",
+      "ru": "Адаптер для интеграции Xiaomi Gateway 3",
+      "pt": "Adaptador para integração Xiaomi Gateway 3",
+      "nl": "Adapter voor Xiaomi Gateway 3-integratie",
+      "fr": "Adaptateur pour intégration Xiaomi Gateway 3",
+      "it": "Adattatore per integrazione Xiaomi Gateway 3",
+      "es": "Adaptador para la integración de Xiaomi Gateway 3",
+      "pl": "Adapter do integracji Xiaomi Gateway 3",
+      "zh-cn": "小米网关3集成适配器"
     },
-    "encryptedNative": [
-        "email",
-        "password"
+    "authors": [
+      "Evgenii Abramov <john.abramov@gmail.com>"
     ],
-    "protectedNative": [
-        "email",
-        "password"
+    "keywords": [
+      "ioBroker",
+      "smarthome",
+      "xiaomi",
+      "xiaomi-gateway",
+      "zigbee"
     ],
-    "objects": [],
-    "instanceObjects": [
-        {
-            "_id": "info.connection",
-            "type": "state",
-            "common": {
-                "role": "indicator.connected",
-                "name": "If connected to Gateway",
-                "type": "boolean",
-                "read": true,
-                "write": false
-            },
-            "native": {}
-        }
-    ]
+    "stopBeforeUpdate": true,
+    "connectionType": "local",
+    "dataSource": "push",
+    "license": "MIT",
+    "platform": "Javascript/Node.js",
+    "icon": "xiaomi-gateway3.png",
+    "enabled": true,
+    "readme": "https://github.com/lasthead0/ioBroker.xiaomi-gateway3/blob/master/README.md",
+    "loglevel": "info",
+    "mode": "daemon",
+    "extIcon": "https://raw.githubusercontent.com/lasthead0/ioBroker.xiaomi-gateway3/master/admin/xiaomi-gateway3.png",
+    "type": "iot-systems",
+    "compact": true,
+    "materialize": true,
+    "messagebox": true,
+    "dependencies": [
+      {
+        "js-controller": ">=2.0.0"
+      }
+    ],
+    "news": {
+      "0.1.0": {
+        "en": "Added support for BLE devices (needed tests)\nImprovements for zigbee and BLE support\nAdded output for debug purpose\nA lot of code improvements",
+        "de": "Unterstützung für BLE-Geräte hinzugefügt (benötigte Tests)\nVerbesserungen für Zigbee- und BLE-Unterstützung\nAusgabe für Debug-Zwecke hinzugefügt\nViele Code-Verbesserungen",
+        "ru": "Добавлена поддержка устройств BLE (необходимы тесты)\nУлучшения для поддержки zigbee и BLE\nДобавлен вывод для отладки\nМножество улучшений кода",
+        "pt": "Adicionado suporte para dispositivos BLE (testes necessários)\nMelhorias para suporte a zigbee e BLE\nAdicionada saída para fins de depuração\nMuitas melhorias de código",
+        "nl": "Ondersteuning toegevoegd voor BLE-apparaten (benodigde tests)\nVerbeteringen voor zigbee- en BLE-ondersteuning\nUitvoer toegevoegd voor foutopsporingsdoeleinden\nVeel codeverbeteringen",
+        "fr": "Ajout de la prise en charge des appareils BLE (tests nécessaires)\nAméliorations pour le support zigbee et BLE\nAjout d'une sortie à des fins de débogage\nBeaucoup d'améliorations de code",
+        "it": "Aggiunto supporto per dispositivi BLE (test necessari)\nMiglioramenti per zigbee e supporto BLE\nAggiunto output per scopi di debug\nMolti miglioramenti al codice",
+        "es": "Soporte agregado para dispositivos BLE (pruebas necesarias)\nMejoras para la compatibilidad con zigbee y BLE\nSalida agregada para fines de depuración\nMuchas mejoras de código",
+        "pl": "Dodano wsparcie dla urządzeń BLE (wymagane testy)\nUlepszenia obsługi zigbee i BLE\nDodano dane wyjściowe do celów debugowania\nWiele ulepszeń kodu",
+        "zh-cn": "添加了对 BLE 设备的支持（需要测试）\nzigbee 和 BLE 支持的改进\n添加了用于调试目的的输出\n大量代码改进"
+      },
+      "0.0.1-alpha.0": {
+        "en": "Initial release",
+        "de": "Erstveröffentlichung",
+        "ru": "Первый выпуск",
+        "pt": "lançamento inicial",
+        "nl": "Eerste uitgave",
+        "fr": "Première version",
+        "it": "Versione iniziale",
+        "es": "Versión inicial",
+        "pl": "Pierwsze wydanie",
+        "zh-cn": "初始发行"
+      }
+    }
+  },
+  "native": {
+    "email": "",
+    "password": "",
+    "server": "cn",
+    "token": "",
+    "localip": "",
+    "telnetCmd": "",
+    "debugLog": false,
+    "dLogMQTT": false,
+    "debugOutput": false,
+    "gwEnableTelnet": true,
+    "gwEnablePublicMqtt": true,
+    "gwLockFirmware": false,
+    "gwDisableBuzzer": false,
+    "gwInMemory": false
+  },
+  "encryptedNative": [
+    "email",
+    "password"
+  ],
+  "protectedNative": [
+    "email",
+    "password"
+  ],
+  "objects": [],
+  "instanceObjects": [
+    {
+      "_id": "info.connection",
+      "type": "state",
+      "common": {
+        "role": "indicator.connected",
+        "name": "If connected to Gateway",
+        "type": "boolean",
+        "read": true,
+        "write": false
+      },
+      "native": {}
+    }
+  ]
 }

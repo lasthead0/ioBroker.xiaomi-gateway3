@@ -194,9 +194,14 @@ Move devices DB files to memory. This can improve work zigbee and bluetooth devi
     Placeholder for the next version (at the beginning of the line):
     ### **WORK IN PROGRESS**
 -->
+### 0.1.0 (2021-11-09)
+* (Evgenii Abramov) Added support for BLE devices (needed tests)
+* (Evgenii Abramov) Improvements for zigbee and BLE support
+* (Evgenii Abramov) Added output for debug purpose
+* (Evgenii Abramov) A lot of code improvements
+
 ### 0.0.1-alpha.0 (2021-10-13)
 * (Evgenii Abramov) Initial release
-
 
 ## License
 MIT License
