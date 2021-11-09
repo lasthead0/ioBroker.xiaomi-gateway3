@@ -49,6 +49,103 @@ You can flash gateway with custom or stock firmware these versions: [wiki](https
 __*!!Attantion:*__ Firmware versions lower than `1.4.7_0000` adapter not support and will not. Support of versions lower than `v1.5.0_0026` not guaranteed.
 
 
+## Supported devices
+
+- [x] Tested
+- [ ] Not tested
+
+### Zigbee devices
+
+- [ ] Aqara Bulb (ZNLDP12LM)
+- [ ] Aqara Button (WXKG11LM)
+- [ ] Aqara Cube (MFKZQ01LM)
+- [ ] Aqara Curtain (ZNCLDJ11LM)
+- [ ] Aqara Curtain B1 (ZNCLDJ12LM)
+- [ ] Aqara Door Lock S1 (ZNMS11LM)
+- [ ] Aqara Door Lock S2 (ZNMS12LM)
+- [ ] Aqara Door Lock S2 Pro (ZNMS12LM)
+- [x] Aqara Door Sensor (MCCGQ11LM)
+- [ ] Aqara Double Wall Button (WXKG02LM)
+- [ ] Aqara Double Wall Button D1 (WXKG07LM)
+- [ ] Aqara Double Wall Switch (QBKG03LM,QBKG12LM)
+- [ ] Aqara Double Wall Switch D1 (QBKG22LM,QBKG24LM)
+- [ ] Aqara Double Wall Switch E1 (QBKG39LM,QBKG41LM)
+- [ ] Aqara Double Wall Switch H1 (WS-EUK02)
+- [ ] Aqara Double Wall Switch US (WS-USC04)
+- [x] Aqara Motion Sensor (RTCGQ11LM)
+- [ ] Aqara Opple Four Button (WXCJKG12LM)
+- [ ] Aqara Opple MX480 (XDD13LM)
+- [ ] Aqara Opple MX650 (XDD12LM)
+- [ ] Aqara Opple Six Button (WXCJKG13LM)
+- [ ] Aqara Opple Two Button (WXCJKG11LM)
+- [ ] Aqara Plug (SP-EUC01)
+- [ ] Aqara Precision Motion Sensor (RTCGQ13LM)
+- [ ] Aqara Relay (LLKZMK11LM)
+- [ ] Aqara Relay T1 (DLKZMK11LM,SSM-U01,SSM-U02)
+- [ ] Aqara Roller Shade (ZNGZDJ11LM)
+- [ ] Aqara Roller Shade E1 (ZNJLBL01LM)
+- [ ] Aqara Shake Button (WXKG12LM)
+- [ ] Aqara Single Wall Button (WXKG03LM)
+- [ ] Aqara Single Wall Button D1 (WXKG06LM)
+- [ ] Aqara Single Wall Switch (QBKG04LM,QBKG11LM)
+- [ ] Aqara Single Wall Switch D1 (QBKG21LM,QBKG23LM)
+- [ ] Aqara Single Wall Switch E1 (QBKG38LM,QBKG40LM)
+- [ ] Aqara Single Wall Switch H1 (WS-EUK01)
+- [ ] Aqara Socket (QBCZ11LM)
+- [ ] Aqara TH Sensor (WSDCGQ11LM,WSDCGQ12LM)
+- [ ] Aqara TVOC Air Quality Monitor (VOCKQJK11LM)
+- [ ] Aqara Thermostat S2 (KTWKQ03ES)
+- [ ] Aqara Triple Wall Switch D1 (QBKG25LM,QBKG26LM)
+- [ ] Aqara Vibration Sensor (DJT11LM)
+- [ ] Aqara Water Leak Sensor (SJCGQ11LM)
+- [ ] Honeywell Gas Sensor (JTQJ-BF-01LM/BW)
+- [ ] Honeywell Smoke Sensor (JTYJ-GD-01LM/BW)
+- [ ] IKEA Bulb E14 (LED1649C5)
+- [ ] IKEA Bulb E14 400 lm (LED1536G5)
+- [ ] IKEA Bulb E27 1000 lm (LED1623G12)
+- [ ] IKEA Bulb E27 950 lm (LED1546G12)
+- [ ] IKEA Bulb E27 980 lm (LED1545G12)
+- [ ] IKEA Bulb GU10 400 lm (LED1537R6,LED1650R5)
+- [ ] Xiaomi Button (WXKG01LM)
+- [ ] Xiaomi Door Sensor (MCCGQ01LM)
+- [ ] Xiaomi Light Sensor (GZCGQ01LM)
+- [ ] Xiaomi Motion Sensor (RTCGQ01LM)
+- [x] Xiaomi Plug (ZNCZ02LM)
+- [ ] Xiaomi Plug EU (ZNCZ04LM)
+- [ ] Xiaomi Plug TW (ZNCZ03LM)
+- [ ] Xiaomi Plug US (ZNCZ12LM)
+- [ ] Xiaomi TH Sensor (WSDCGQ01LM) 
+
+### BLE devices
+
+- [ ] Aqara Door Lock N100 (ZNMS16LM)
+- [ ] Aqara Door Lock N200 (ZNMS17LM)
+- [ ] Honeywell Smoke Alarm (JTYJ-GD-03MI)
+- [ ] Xiaomi Alarm Clock (CGD1)
+- [ ] Xiaomi Door Lock (MJZNMS02LM,XMZNMST02YD)
+- [ ] Xiaomi Door Sensor 2 (MCCGQ02HL)
+- [ ] Xiaomi Flower Care (HHCCJCY01)
+- [ ] Xiaomi Flower Pot (HHCCPOT002)
+- [ ] Xiaomi Magic Cube (XMMF01JQD)
+- [ ] Xiaomi Mosquito Repellent (WX08ZM)
+- [ ] Xiaomi Motion Sensor 2 (RTCGQ02LM)
+- [ ] Xiaomi Night Light 2 (MJYD02YL-A)
+- [ ] Xiaomi Qingping Door Sensor (CGH1)
+- [ ] Xiaomi Qingping Motion Sensor (CGPR1)
+- [ ] Xiaomi Qingping TH Lite (CGDK2)
+- [ ] Xiaomi Qingping TH Sensor (CGG1)
+- [ ] Xiaomi Safe Box (BGX-5/X1-3001)
+- [ ] Xiaomi TH Clock (LYWSD02MMC)
+- [ ] Xiaomi TH Sensor (LYWSDCGQ/01ZM)
+- [x] Xiaomi TH Sensor 2 (LYWSD03MMC)
+- [ ] Xiaomi Toothbrush T500 (MES601)
+- [ ] Xiaomi Water Leak Sensor (SJWS01LM)
+- [ ] Xiaomi ZenMeasure Clock (MHO-C303)
+- [ ] Xiaomi ZenMeasure TH (MHO-C401)
+- [ ] Yeelight Button S1 (YLAI003)
+
+_**Note:** BLE devices may not have states at first time after pairing because i don't know specs for devices and didn't define properties for all devices for now. States will added when device will update correponding propertie. I hope I will fix this over time with your help._
+
 ## Configuration
 
 To connect a gateway you need get IP and TOKEN of gateway. You can do this manually or from cloud.

@@ -7,7 +7,7 @@ const crypto = require('crypto');
 const mqtt = require('mqtt');
 /* */
 const {MiioHelper, Gateway3Helper, ioBrokerHelper: iob} = require('./lib/helpers');
-const XiaomiCloud = require('./lib/xiaomi_cloud');
+const XiaomiCloud = require('./lib/xiaomiCloud');
 const Gateway3 = require('./lib/gateway3');
 
 class XiaomiGateway3 extends utils.Adapter {
@@ -216,14 +216,14 @@ class XiaomiGateway3 extends utils.Adapter {
         /* */
         if (topic.match(/^zigbee\/send$/gm)) {
             if (debugOutput)
-                this.gateway3.processMessageZigbee(JSON.parse(msg), this._cbProcessMessageZigbee.bind(this), this._cbDebugOutput.bind(this));
+                this.gateway3.processMessageZigbee(JSON.parse(msg), this._cbProcessMessage.bind(this), this._cbDebugOutput.bind(this));
             else 
-                this.gateway3.processMessageZigbee(JSON.parse(msg), this._cbProcessMessageZigbee.bind(this));
+                this.gateway3.processMessageZigbee(JSON.parse(msg), this._cbProcessMessage.bind(this));
         }  else if (topic.match(/^log\/ble$/gm)) {
             if (debugOutput)
-                this.gateway3.processMessageBle(JSON.parse(msg), this._cbProcessMessageBle.bind(this), this._cbDebugOutput.bind(this));
+                this.gateway3.processMessageBle(JSON.parse(msg), this._cbProcessMessage.bind(this), this._cbDebugOutput.bind(this));
             else
-                this.gateway3.processMessageBle(JSON.parse(msg), this._cbProcessMessageBle.bind(this));
+                this.gateway3.processMessageBle(JSON.parse(msg), this._cbProcessMessage.bind(this));
         }  else if (topic.match(/^log\/miio$/gm)) {
             // TODO: or not TODO:
         } else if (topic.match(/\/heartbeat$/gm)) {
@@ -235,10 +235,14 @@ class XiaomiGateway3 extends utils.Adapter {
     }
 
     /* */
-    async _cbProcessMessageZigbee(mac, payload) {
+    async _cbProcessMessage(mac, payload) {
         const id = String(mac).substr(2);
         const states = await this.getStatesAsync(`${id}*`);
 
+        /*
+         * Context build from current device states (and their values)
+         * and new states from payload (and their values).
+         */
         const context = Object.assign({},
             Object.keys(states).reduce((p, c) => {
                 const [sn,] = c.split('.').splice(-1);
@@ -252,52 +256,36 @@ class XiaomiGateway3 extends utils.Adapter {
             }, {})
         );
 
-        /* create array of states setters functions */
-        const funcs = Object.keys(payload).map(k => {
-            const val = context[k];
-            const setter = iob.getSetter(k);
-
-            if (setter != undefined) {
-                return async () => {
-                    setter(
-                        id,
-                        async val => {await this.setStateAsync(`${id}.${k}`, val, true)},
-                        context,
-                        this.#timers
-                    );
-                };
-            } else if (val != undefined) {
-                return async () => {await this.setStateAsync(`${id}.${k}`, val, true)};
-            }
+        /* Create array of states setters functions */
+        const funcs = Object.keys(payload).map(state => {
+            return iob.stateSetter(state)(
+                id,
+                async val => {await this.setStateAsync(`${id}.${state}`, val, true)},
+                context,
+                this.#timers
+            );
         });
 
-        /* call states setters */
-        for (let sf of funcs)
-            if (typeof sf === 'function') sf();
-    }
-
-    /* */
-    async _cbProcessMessageBle(mac, payload) {
-        const id = String(mac).substr(2);
-
-        /**
+        /*
          * Have to try create Object here because I don't know specs for all bluetooth devices 
          * and can't create needed objects in _cbFindOrCreateDevice
          * TODO: FIXME:
          */
         for (let spec of Object.keys(payload)) {
-            await this.setObjectNotExistsAsync(`${id}.${spec}`, iob.normalizeObject({
-                '_id': `${this.namespace}.${id}.${spec}`,
-                'type': 'state',
-                'native': {},
-                'common': {}
-            }));
-
-            const val = payload[spec];
-            
-            if (val != undefined)
-                await this.setStateAsync(`${id}.${spec}`, iob.normalizeStateVal(spec, val), true);
+            await this.setObjectNotExistsAsync(`${id}.${spec}`, Object.assign({},
+                {
+                    '_id': `${this.namespace}.${id}.${spec}`,
+                    'type': 'state',
+                    'native': {},
+                    'common': {}
+                },
+                iob.normalizeStateObject(spec)
+            ));
         }
+        
+        /* Call states setters */
+        for (let sf of funcs)
+            if (typeof sf === 'function') sf();
     }
 
     /* Callback for debug output purpose */
@@ -356,12 +344,15 @@ class XiaomiGateway3 extends utils.Adapter {
         /* */
         for (let spec of specs) {
             /* create state object if it is not exist */
-            await this.setObjectNotExistsAsync(`${objectId}.${spec}`, iob.normalizeObject({
-                '_id': `${this.namespace}.${objectId}.${spec}`,
-                'type': 'state',
-                'native': {},
-                'common': {}
-            }));
+            await this.setObjectNotExistsAsync(`${objectId}.${spec}`, Object.assign({},
+                {
+                    '_id': `${this.namespace}.${objectId}.${spec}`,
+                    'type': 'state',
+                    'native': {},
+                    'common': {}
+                },
+                iob.normalizeStateObject(spec)
+            ));
             
             /* set init state value if it is exist */
             const val = init[spec];
