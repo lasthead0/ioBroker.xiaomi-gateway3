@@ -1,11 +1,10 @@
-![Logo](admin/xiaomi-gateway3.png)
+![Logo](static/xiaomi-gateway3_logo.png)
 # ioBroker.xiaomi-gateway3
 
 [![NPM version](https://img.shields.io/npm/v/iobroker.xiaomi-gateway3.svg)](https://www.npmjs.com/package/iobroker.xiaomi-gateway3)
 [![Downloads](https://img.shields.io/npm/dm/iobroker.xiaomi-gateway3.svg)](https://www.npmjs.com/package/iobroker.xiaomi-gateway3)
 ![Number of Installations (latest)](https://iobroker.live/badges/xiaomi-gateway3-installed.svg)
-![Number of Installations (stable)](https://iobroker.live/badges/xiaomi-gateway3-stable.svg)
-[![Dependency Status](https://img.shields.io/david/lasthead0/iobroker.xiaomi-gateway3.svg)](https://david-dm.org/lasthead0/iobroker.xiaomi-gateway3)
+<!-- ![Number of Installations (stable)](https://iobroker.live/badges/xiaomi-gateway3-stable.svg) -->
 
 ![Test and Release](https://github.com/lasthead0/ioBroker.xiaomi-gateway3/workflows/Test%20and%20Release/badge.svg)
 
