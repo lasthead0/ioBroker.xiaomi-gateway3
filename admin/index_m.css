@@ -49,6 +49,14 @@ h6.title {
     align-items: center;
 }
 
+div.in-card-separator {
+    border-left: 1px solid #b6b6b6;
+    height: 57px;
+    margin: 0;
+    margin-left: 12px;
+    padding: 0 !important;
+}
+
 /* Loader classes */
 .loader {
     border: 4px solid #b8d1f3;

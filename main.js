@@ -216,7 +216,7 @@ class XiaomiGateway3 extends utils.Adapter {
     async _onMqttMessage(topic, msg) {
         this.logger.debug(`(_MQTT_) ${topic} ${msg}`);
 
-        const {debugOutput} = this.config;
+        const {debugOutput, msgReceivedStat} = this.config;
 
         if (String(msg).match(/^\{.+\}$/gm) != undefined) {
             try {
@@ -239,7 +239,8 @@ class XiaomiGateway3 extends utils.Adapter {
                     //TODO: or not TODO:
                     // Gateway heartbeats (don't handle for now)
                 } else if (topic.match(/\/(MessageReceived|devicestatechange)$/gm)) {
-                    // TODO: or not TODO:
+                    if (msgReceivedStat)
+                        this.gateway3.processMessageReceived(msgObject, this._cbProcessMessageReceived.bind(this));
                 }
             } catch (e) {
                 this.logger.error(e.stack);
@@ -299,6 +300,17 @@ class XiaomiGateway3 extends utils.Adapter {
         /* Call states setters */
         for (let sf of funcs)
             if (typeof sf === 'function') sf();
+    }
+
+    /* Messages statistic callback */
+    async _cbProcessMessageReceived(mac, payload) {
+        const id = String(mac).substr(2);
+
+        await this.setStateAsync(
+            `${id}.messages_stat`,
+            JSON.stringify(payload),
+            true
+        );
     }
 
     /* Callback for debug output purpose */
@@ -375,7 +387,7 @@ class XiaomiGateway3 extends utils.Adapter {
         }
 
         /* Get some config options */
-        const {debugOutput} = this.config;
+        const {debugOutput, msgReceivedStat} = this.config;
 
         if (debugOutput) {
             /* Create state object for debug outout if it is not exist */
@@ -391,6 +403,33 @@ class XiaomiGateway3 extends utils.Adapter {
                     'write': false
                 }
             });
+        }
+
+        if (msgReceivedStat) {
+            /* Create state object for statistic if it is not exist */
+            await this.setObjectNotExistsAsync(`${objectId}.messages_stat`, {
+                '_id': `${this.namespace}.${objectId}.messages_stat`,
+                'type': 'state',
+                'native': {},
+                'common': {
+                    'role': 'state',
+                    'name': 'Messages statistic',
+                    'type': 'string',
+                    'read': true,
+                    'write': false
+                }
+            });
+        } else {
+            /* Looking for state which contains statistic and delete state and object if they are exists */
+            const states = await this.getStatesOfAsync(`${objectId}`);
+            const _id = (states.find(el => el._id == `${this.namespace}.${objectId}.messages_stat`) || {})._id;
+
+            if (_id != undefined) {
+                const id = _id.split('.').slice(-2).join('.');
+
+                await this.deleteStateAsync(id);
+                await this.delObjectAsync(id);
+            }
         }
     }
 

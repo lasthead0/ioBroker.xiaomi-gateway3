@@ -51,6 +51,25 @@
     "type": "iot-systems",
     "compact": true,
     "materialize": true,
+    "materializeTab": true,
+    "adminTab": {
+        "ignoreConfigUpdate": true,
+        "singleton": false,
+        "name": {
+            "en": "Gateway 3",
+            "de": "Gateway 3",
+            "ru": "Gateway 3",
+            "pt": "Gateway 3",
+            "nl": "Gateway 3",
+            "fr": "Gateway 3",
+            "it": "Gateway 3",
+            "es": "Gateway 3",
+            "pl": "Gateway 3",
+            "zh-cn": "Gateway 3"
+        },
+        "link": "",
+        "fa-icon": "</i><img style='width: 20px; margin-bottom: -4px;' src='/adapter/xiaomi-gateway3/xiaomi-gateway3.png'><i>"
+    },
     "messagebox": true,
     "dependencies": [
       {
@@ -94,6 +113,7 @@
     "debugLog": false,
     "dLogMQTT": false,
     "debugOutput": false,
+    "msgReceivedStat": false,
     "gwEnableTelnet": true,
     "gwEnablePublicMqtt": true,
     "gwLockFirmware": false,
