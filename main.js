@@ -218,24 +218,32 @@ class XiaomiGateway3 extends utils.Adapter {
 
         const {debugOutput} = this.config;
 
-        /* */
-        if (topic.match(/^zigbee\/send$/gm)) {
-            if (debugOutput)
-                this.gateway3.processMessageZigbee(JSON.parse(msg), this._cbProcessMessage.bind(this), this._cbDebugOutput.bind(this));
-            else 
-                this.gateway3.processMessageZigbee(JSON.parse(msg), this._cbProcessMessage.bind(this));
-        }  else if (topic.match(/^log\/ble$/gm)) {
-            if (debugOutput)
-                this.gateway3.processMessageBle(JSON.parse(msg), this._cbProcessMessage.bind(this), this._cbDebugOutput.bind(this));
-            else
-                this.gateway3.processMessageBle(JSON.parse(msg), this._cbProcessMessage.bind(this));
-        }  else if (topic.match(/^log\/miio$/gm)) {
-            // TODO: or not TODO:
-        } else if (topic.match(/\/heartbeat$/gm)) {
-            //TODO: or not TODO:
-            // Gateway heartbeats (don't handle for now)
-        } else if (topic.match(/\/(MessageReceived|devicestatechange)$/gm)) {
-            // TODO: or not TODO:
+        if (String(msg).match(/^\{.+\}$/gm) != undefined) {
+            try {
+                const msgObject = JSON.parse(msg);
+
+                /* */
+                if (topic.match(/^zigbee\/send$/gm)) {
+                    if (debugOutput)
+                        this.gateway3.processMessageZigbee(msgObject, this._cbProcessMessage.bind(this), this._cbDebugOutput.bind(this));
+                    else 
+                        this.gateway3.processMessageZigbee(msgObject, this._cbProcessMessage.bind(this));
+                }  else if (topic.match(/^log\/ble$/gm)) {
+                    if (debugOutput)
+                        this.gateway3.processMessageBle(msgObject, this._cbProcessMessage.bind(this), this._cbDebugOutput.bind(this));
+                    else
+                        this.gateway3.processMessageBle(msgObject, this._cbProcessMessage.bind(this));
+                }  else if (topic.match(/^log\/miio$/gm)) {
+                    // TODO: or not TODO:
+                } else if (topic.match(/\/heartbeat$/gm)) {
+                    //TODO: or not TODO:
+                    // Gateway heartbeats (don't handle for now)
+                } else if (topic.match(/\/(MessageReceived|devicestatechange)$/gm)) {
+                    // TODO: or not TODO:
+                }
+            } catch (e) {
+                this.logger.error(e.stack);
+            }
         }
     }
 
