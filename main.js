@@ -136,51 +136,56 @@ class XiaomiGateway3 extends utils.Adapter {
         if (typeof obj === 'object' && obj.message) {
             const {from, command, message, callback} = obj;
             
-            switch (command) {
-                case 'GetGatewayFromCloud': {
-                    const {email, password, server} = message;
-                    
-                    const success = await this.xiaomiCloud.login(email, password);
+            const handlers = {
+                'GetGatewayFromCloud': this._msgGetGatewayFromCloud.bind(this),
+                'PingGateway3': this._msgPingGateway3.bind(this),
+                'CheckTelnet': this._msgCheckTelnet.bind(this)
+            };
 
-                    if (success) {
-                        const devices = await this.xiaomiCloud.getDevices(server);
-
-                        if (devices != undefined) {
-                            const gws = devices.filter(el => (el.model == 'lumi.gateway.mgl03' && el.isOnline == true));
-                            const msg = gws.map(el => (({model, token, localip}) => ({model, token, localip}))(el));
-                            
-                            if (callback) this.sendTo(from, command, msg, callback);
-                        } else {
-                            this.logger.error('ERROR: Failed getting devices.');
-                            if (callback) this.sendTo(from, command, 'ERROR: Failed getting devices', callback);
-                        }
-                    } else {
-                        this.logger.error('ERROR: Xiaomi Cloud login fail!');
-                        if (callback) this.sendTo(from, command, 'ERROR: Xiaomi Cloud login fail!', callback);
-                    }
-
-                    break;
-                }
-                case 'PingGateway3': {
-                    const {localip} = message;
-                    let avbl = false;
-
-                    if (localip != undefined) avbl = await MiioHelper.discover(localip);
-                    if (callback) this.sendTo(from, command, avbl, callback);
-
-                    break;
-                }
-                case 'CheckTelnet': {
-                    const {localip} = message;
-                    let avbl = false;
-
-                    if (localip != undefined) avbl = await Gateway3Helper.checkPort(23, localip);
-                    if (callback) this.sendTo(from, command, avbl, callback);
-
-                    break;
-                }
-            }
+            await handlers[command](from, command, message, callback);
         }
+    }
+
+    /* 'GetGatewayFromCloud' message handler */
+    async _msgGetGatewayFromCloud(from, command, message, callback) {
+        const {email, password, server} = message;
+                    
+        const success = await this.xiaomiCloud.login(email, password);
+
+        if (success) {
+            const devices = await this.xiaomiCloud.getDevices(server);
+
+            if (devices != undefined) {
+                const gws = devices.filter(el => (el.model == 'lumi.gateway.mgl03' && el.isOnline == true));
+                const msg = gws.map(el => (({model, token, localip}) => ({model, token, localip}))(el));
+                
+                if (callback) this.sendTo(from, command, msg, callback);
+            } else {
+                this.logger.error('ERROR: Failed getting devices.');
+                if (callback) this.sendTo(from, command, 'ERROR: Failed getting devices', callback);
+            }
+        } else {
+            this.logger.error('ERROR: Xiaomi Cloud login fail!');
+            if (callback) this.sendTo(from, command, 'ERROR: Xiaomi Cloud login fail!', callback);
+        }
+    }
+
+    /* 'PingGateway3' message handler */
+    async _msgPingGateway3(from, command, message, callback) {
+        const {localip} = message;
+        let avbl = false;
+
+        if (localip != undefined) avbl = await MiioHelper.discover(localip);
+        if (callback) this.sendTo(from, command, avbl, callback);
+    }
+
+    /* 'CheckTelnet' message handler */
+    async _msgCheckTelnet(from, command, message, callback) {
+        const {localip} = message;
+        let avbl = false;
+
+        if (localip != undefined) avbl = await Gateway3Helper.checkPort(23, localip);
+        if (callback) this.sendTo(from, command, avbl, callback);
     }
     
     /* Adapter 'unload' event handler */
@@ -212,7 +217,7 @@ class XiaomiGateway3 extends utils.Adapter {
         this.logger.debug(`(_MQTT_) ${topic} ${msg}`);
 
         const {debugOutput} = this.config;
-        
+
         /* */
         if (topic.match(/^zigbee\/send$/gm)) {
             if (debugOutput)
@@ -361,11 +366,11 @@ class XiaomiGateway3 extends utils.Adapter {
                 await this.setStateAsync(`${objectId}.${spec}`, iob.normalizeStateVal(spec, val), true);
         }
 
-        /* State for debug output purpose */
+        /* Get some config options */
         const {debugOutput} = this.config;
 
         if (debugOutput) {
-            /* create state object for debug outout if it is not exist */
+            /* Create state object for debug outout if it is not exist */
             await this.setObjectNotExistsAsync(`${objectId}.debug_output`, {
                 '_id': `${this.namespace}.${objectId}.debug_output`,
                 'type': 'state',
