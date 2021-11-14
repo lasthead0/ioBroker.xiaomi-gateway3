@@ -1,4 +1,5 @@
-![Logo](static/xiaomi-gateway3_logo.png)
+<img src="static/xiaomi-gateway3_logo.png" alt="Logo" width="200"/>
+
 # ioBroker.xiaomi-gateway3
 
 [![NPM version](https://img.shields.io/npm/v/iobroker.xiaomi-gateway3.svg)](https://www.npmjs.com/package/iobroker.xiaomi-gateway3)
@@ -145,6 +146,7 @@ __*!!Attantion:*__ Firmware versions lower than `1.4.7_0000` adapter not support
 
 _**Note:** BLE devices may not have states at first time after pairing because i don't know specs for devices and didn't define properties for all devices for now. States will added when device will update correponding propertie. I hope I will fix this over time with your help._
 
+
 ## Configuration
 
 To connect a gateway you need get IP and TOKEN of gateway. You can do this manually or from cloud.
@@ -168,6 +170,10 @@ You have several options to configure adapter and gatewey.
 - [x] __Debug output (to stete)__<br/>
 Adapter will doing output some debug info into state for each device.
 
+- [x] __Collect statistic__<br/>
+Adapter collect statistic about zigbee devices messages: how much received, how much missed and etc. Statistic stored to state at each device and can be viewed in 'tab' page (from sidebar menu). <br/>
+_**Note:** Adapter do reset statistic on restart._
+
 ### Basic Gateway3 settings
 
 - [x] __Telnet enabled__<br/>
@@ -188,6 +194,15 @@ Set true to disable annoying buzzer signals or false to enable all signals.
 Move devices DB files to memory. This can improve work zigbee and bluetooth devices. __*But can occur losing some data. Use on your own risk.*__
 
 
+## Tab page
+
+### Statistic
+
+<img src="static/tab-statistic.png">
+
+_**Note:** Statistic don't load by default on page open. You have to use button `RELOAD` to update statistic on page._
+
+
 ## Changelog
 <!--
     Placeholder for the next version (at the beginning of the line):
@@ -201,6 +216,7 @@ Move devices DB files to memory. This can improve work zigbee and bluetooth devi
 
 ### 0.0.1-alpha.0 (2021-10-13)
 * (Evgenii Abramov) Initial release
+
 
 ## License
 MIT License
