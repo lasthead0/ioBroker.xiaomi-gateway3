@@ -319,7 +319,12 @@ class XiaomiGateway3 extends utils.Adapter {
         const states = await this.getStatesAsync(`${id}.debug_output`);
 
         try {
-            const debugOutputStateVal = JSON.parse((states[`${this.namespace}.${id}.debug_output`] || {'val': '\{\}'}).val);
+            const debugOutputState = Array.of(states[`${this.namespace}.${id}.debug_output`])
+                .filter(el => el != undefined)
+                .filter(el => Object.keys(el).includes('val') && String(el.val).match(/^\{.+\}$/gm) != undefined)
+                .concat([{'val': '\{\}'}])[0];
+            const debugOutputStateVal = JSON.parse(debugOutputState.val);
+
             const debugOutputPayloadVal = Object.assign({}, debugOutputStateVal, payload, {
                 'zigbeeProperties': payload.zigbeeProperties != undefined ?
                     [].concat(debugOutputStateVal.zigbeeProperties || [], payload.zigbeeProperties)
