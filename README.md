@@ -1,4 +1,4 @@
-<img src="static/xiaomi-gateway3_logo.png" alt="Logo" width="200"/>
+<img src="static/xiaomi-gateway3_logo.png" alt="Logo" width="150"/>
 
 # ioBroker.xiaomi-gateway3
 
