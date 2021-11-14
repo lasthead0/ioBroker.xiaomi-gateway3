@@ -22,6 +22,7 @@
   "dependencies": {
     "@iobroker/adapter-core": "^2.5.0",
     "axios": "^0.24.0",
+    "date-fns": "^2.25.0",
     "js-miio-simple": "^1.1.0",
     "mqtt": "^4.2.8",
     "telnet-client": "^1.4.10"
