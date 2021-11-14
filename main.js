@@ -138,6 +138,7 @@ class XiaomiGateway3 extends utils.Adapter {
             
             const handlers = {
                 'GetGatewayFromCloud': this._msgGetGatewayFromCloud.bind(this),
+                'GetMessagesStat': this._msgGetMessagesStat.bind(this),
                 'PingGateway3': this._msgPingGateway3.bind(this),
                 'CheckTelnet': this._msgCheckTelnet.bind(this)
             };
@@ -168,6 +169,22 @@ class XiaomiGateway3 extends utils.Adapter {
             this.logger.error('ERROR: Xiaomi Cloud login fail!');
             if (callback) this.sendTo(from, command, 'ERROR: Xiaomi Cloud login fail!', callback);
         }
+    }
+
+    /* 'GetMessagesStat' message handler */
+    async _msgGetMessagesStat(from, command, message, callback) {
+        const devices = await this.getDevicesAsync();
+
+        let msgStatObjects = [];
+
+        for (let d of devices) {
+            const state = await this.getStateAsync(`${d.native.id}.messages_stat`);
+
+            if (state != undefined && String(state.val).match(/^\{.+\}$/gm) != undefined)
+                msgStatObjects.push(Object.assign({}, {name: d.common.name}, JSON.parse(state.val)));
+        }
+        
+        if (callback) this.sendTo(from, command, msgStatObjects, callback);
     }
 
     /* 'PingGateway3' message handler */
@@ -424,6 +441,8 @@ class XiaomiGateway3 extends utils.Adapter {
                     'write': false
                 }
             });
+
+            await this.setStateAsync(`${objectId}.messages_stat`, '', true);
         } else {
             /* Looking for state which contains statistic and delete state and object if they are exists */
             const states = await this.getStatesOfAsync(`${objectId}`);
