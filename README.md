@@ -151,7 +151,7 @@ _**Note:** BLE devices may not have states at first time after pairing because i
 
 To connect a gateway you need get IP and TOKEN of gateway. You can do this manually or from cloud.
 
-__*!!Attantion: There is issue with getting devices from cloud. I didn't get yet is this issue in code or with cloud, however you should try to get (to press button) devices several times, for now.*__
+_**Attantion:** There is issue with getting devices from cloud. I don't get yet is this issue with code or with cloud, however you should try to get (press button) devices several times (until you finally get), for now._
 
 Also you have to chose telnet open command (in most cases option #2). You can test connection and telnet by buttons.
 
@@ -201,6 +201,8 @@ Move devices DB files to memory. This can improve work zigbee and bluetooth devi
 <img src="static/tab-statistic.png">
 
 _**Note:** Statistic don't load by default on page open. You have to use button `RELOAD` to update statistic on page._
+
+_**Note 2:** You should to keep in mind this is not really statistic of zigbee messages between gateway and device (zigbee protocol statistic). This is statistic of messages  which get adapter. What does it means? No differences for adapter is gateway don't get message from device or adapter himself don't get message from gateway (by MQTT). And if by any cases (Wi-Fi connection problem, for example) adapter don't get messages from gateway it interpritate this messages as missed, but actualy zigbee is ok._
 
 
 ## Changelog
