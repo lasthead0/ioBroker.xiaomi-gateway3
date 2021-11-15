@@ -92,7 +92,7 @@ __*!!Attantion:*__ Firmware versions lower than `1.4.7_0000` adapter not support
 - [ ] Aqara Single Wall Switch E1 (QBKG38LM,QBKG40LM)
 - [ ] Aqara Single Wall Switch H1 (WS-EUK01)
 - [ ] Aqara Socket (QBCZ11LM)
-- [ ] Aqara TH Sensor (WSDCGQ11LM,WSDCGQ12LM)
+- [x] Aqara TH Sensor (WSDCGQ11LM,WSDCGQ12LM)
 - [ ] Aqara TVOC Air Quality Monitor (VOCKQJK11LM)
 - [ ] Aqara Thermostat S2 (KTWKQ03ES)
 - [ ] Aqara Triple Wall Switch D1 (QBKG25LM,QBKG26LM)
