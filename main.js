@@ -389,7 +389,7 @@ class XiaomiGateway3 extends utils.Adapter {
         });
 
         /* */
-        for (let spec of specs) {
+        for (let [spec, diff] of specs) {
             /* create state object if it is not exist */
             await this.setObjectNotExistsAsync(`${objectId}.${spec}`, Object.assign({},
                 {
@@ -398,7 +398,7 @@ class XiaomiGateway3 extends utils.Adapter {
                     'native': {},
                     'common': {}
                 },
-                iob.normalizeStateObject(spec)
+                iob.normalizeStateObject(spec, diff)
             ));
             
             /* set init state value if it is exist */
