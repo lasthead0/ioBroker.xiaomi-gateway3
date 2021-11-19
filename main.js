@@ -287,36 +287,30 @@ class XiaomiGateway3 extends utils.Adapter {
             }, {})
         );
 
-        /* Create array of states setters functions */
-        const funcs = Object.keys(payload).map(state => {
-            return iob.stateSetter(state)(
+        for (let state of Object.keys(payload)) {
+            /*
+             * Have to try create Object here because I don't know specs for all bluetooth devices 
+             * and can't create needed objects in _cbFindOrCreateDevice
+             * TODO: FIXME:
+             */
+            await this.setObjectNotExistsAsync(`${id}.${state}`, Object.assign({},
+                {
+                    '_id': `${this.namespace}.${id}.${state}`,
+                    'type': 'state',
+                    'native': {},
+                    'common': {}
+                },
+                iob.normalizeStateObject(state)
+            ));
+
+            /* Execute state setter function for each state of payload */
+            iob.stateSetter(state)(
                 id,
                 async val => {await this.setStateAsync(`${id}.${state}`, val, true)},
                 context,
                 this.#timers
             );
-        });
-
-        /*
-         * Have to try create Object here because I don't know specs for all bluetooth devices 
-         * and can't create needed objects in _cbFindOrCreateDevice
-         * TODO: FIXME:
-         */
-        for (let spec of Object.keys(payload)) {
-            await this.setObjectNotExistsAsync(`${id}.${spec}`, Object.assign({},
-                {
-                    '_id': `${this.namespace}.${id}.${spec}`,
-                    'type': 'state',
-                    'native': {},
-                    'common': {}
-                },
-                iob.normalizeStateObject(spec)
-            ));
         }
-        
-        /* Call states setters */
-        for (let sf of funcs)
-            if (typeof sf === 'function') sf();
     }
 
     /* Messages statistic callback */
