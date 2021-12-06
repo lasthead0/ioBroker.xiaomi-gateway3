@@ -6,7 +6,7 @@ const utils = require('@iobroker/adapter-core');
 const crypto = require('crypto');
 const mqtt = require('mqtt');
 /* */
-const {MiioHelper, Gateway3Helper, ioBrokerHelper: iob} = require('./lib/helpers');
+const {MiioHelper, Gateway3Helper} = require('./lib/helpers');
 const XiaomiCloud = require('./lib/xiaomiCloud');
 const Gateway3 = require('./lib/gateway3');
 
@@ -90,7 +90,10 @@ class XiaomiGateway3 extends utils.Adapter {
             gwEnablePublicMqtt,
             gwLockFirmware,
             gwDisableBuzzer,
-            gwInMemory
+            gwInMemory,
+            /* */
+            debugOutput,
+            msgReceivedStat
         } = this.config;
 
         this.gateway3 = new Gateway3(localip || '127.0.0.1', token || crypto.randomBytes(32).toString('hex'));
@@ -102,7 +105,10 @@ class XiaomiGateway3 extends utils.Adapter {
             gwEnablePublicMqtt,
             gwLockFirmware,
             gwDisableBuzzer,
-            gwInMemory
+            gwInMemory,
+            /* */
+            debugOutput,
+            msgReceivedStat
         };
 
         const [enabledTelnet, enabledMqtt] = await this.gateway3.initialize(gwConfig, this._cbFindOrCreateDevice.bind(this));
@@ -125,7 +131,7 @@ class XiaomiGateway3 extends utils.Adapter {
         const [_id, _state] = id.split('.').slice(-2);
 
         if (state != undefined && state.ack == false) {
-            this.gateway3.sendMessage(_id, {[_state]: iob.normalizeStateVal(_state, state.val)}, this._cbSendMqttMessage.bind(this));
+            this.gateway3.sendMessage(_id, {[_state]: state.val}, this._cbSendMqttMessage.bind(this));
         } else if (state != undefined && state.ack == true) {
             //
         }
@@ -233,31 +239,22 @@ class XiaomiGateway3 extends utils.Adapter {
     async _onMqttMessage(topic, msg) {
         this.logger.debug(`(_MQTT_) ${topic} ${msg}`);
 
-        const {debugOutput, msgReceivedStat} = this.config;
-
         if (String(msg).match(/^\{.+\}$/gm) != undefined) {
             try {
                 const msgObject = JSON.parse(msg);
 
                 /* */
                 if (topic.match(/^zigbee\/send$/gm)) {
-                    if (debugOutput)
-                        this.gateway3.processMessageZigbee(msgObject, this._cbProcessMessage.bind(this), this._cbDebugOutput.bind(this));
-                    else 
-                        this.gateway3.processMessageZigbee(msgObject, this._cbProcessMessage.bind(this));
+                    this.gateway3.processMessageLumi(msgObject, this._cbProcessMessage.bind(this));
                 }  else if (topic.match(/^log\/ble$/gm)) {
-                    if (debugOutput)
-                        this.gateway3.processMessageBle(msgObject, this._cbProcessMessage.bind(this), this._cbDebugOutput.bind(this));
-                    else
-                        this.gateway3.processMessageBle(msgObject, this._cbProcessMessage.bind(this));
+                    this.gateway3.processMessageBle(msgObject, this._cbProcessMessage.bind(this));
                 }  else if (topic.match(/^log\/miio$/gm)) {
                     // TODO: or not TODO:
                 } else if (topic.match(/\/heartbeat$/gm)) {
                     //TODO: or not TODO:
                     // Gateway heartbeats (don't handle for now)
                 } else if (topic.match(/\/(MessageReceived|devicestatechange)$/gm)) {
-                    if (msgReceivedStat)
-                        this.gateway3.processMessageReceived(msgObject, this._cbProcessMessageReceived.bind(this));
+                    this.gateway3.processMessageReceived(msgObject, this._cbProcessMessage.bind(this));
                 }
             } catch (e) {
                 this.logger.error(e.stack);
@@ -270,92 +267,54 @@ class XiaomiGateway3 extends utils.Adapter {
         const id = String(mac).substr(2);
         const states = await this.getStatesAsync(`${id}*`);
 
+        /* Construct key-value object  from current states */
+        const deviceStateVal = Object.keys(states)
+            .reduce((obj, s) => {
+                const [sn,] = s.split('.').splice(-1);
+                return Object.assign({}, obj, {[sn]: (states[s] || {})['val']});
+            }, {});
+
+        /* Construct key-value object from payload */
+        const payloadStateVal = payload
+            .filter(([, val]) => val != undefined)
+            .reduce((obj, [state, val]) => Object.assign({}, obj, {[state.stateName]: val}), {});
+
         /*
          * Context build from current device states (and their values)
          * and new states from payload (and their values).
+         * {
+         *  stateName: [oldVal, newVal],
+         *  ...
+         * }
+         * 
+         * In some cases, opportunity to have current and new (from payload) state value can be useful.
          */
         const context = Object.assign({},
-            Object.keys(states).reduce((p, c) => {
-                const [sn,] = c.split('.').splice(-1);
-
-                return Object.assign({}, p, {[sn]: (states[c] || {})['val']});
-            }, {}),
-            Object.keys(payload).reduce((p, c) => {
-                const val = payload[c];
-
-                return Object.assign({}, p, val != undefined ? {[c]:  iob.normalizeStateVal(c, val)} : {});
-            }, {})
+            Object.keys(deviceStateVal)
+                .reduce((obj, key) => Object.assign({}, obj, {[key]: [deviceStateVal[key], payloadStateVal[key]]}), {}),
+            Object.keys(payloadStateVal)
+                .reduce((obj, key) => Object.assign({}, obj, {[key]: [deviceStateVal[key], payloadStateVal[key]]}), {})
         );
 
-        for (let state of Object.keys(payload)) {
-            /*
+        for (let [state,] of payload) {
+            /* << EOF
              * Have to try create Object here because I don't know specs for all bluetooth devices 
              * and can't create needed objects in _cbFindOrCreateDevice
              * TODO: FIXME:
              */
-            await this.setObjectNotExistsAsync(`${id}.${state}`, Object.assign({},
-                {
-                    '_id': `${this.namespace}.${id}.${state}`,
-                    'type': 'state',
-                    'native': {},
-                    'common': {}
-                },
-                iob.normalizeStateObject(state)
+            const stateName = state.stateName;
+
+            await this.setObjectNotExistsAsync(`${id}.${stateName}`, Object.assign({},
+                {'_id': `${this.namespace}.${id}.${stateName}`},
+                state.stateObject
             ));
+            /* EOF */
+
+            /* */
+            const callback = async val => {await this.setStateAsync(`${id}.${stateName}`, val, true)};
 
             /* Execute state setter function for each state of payload */
-            iob.stateSetter(state)(
-                id,
-                async val => {await this.setStateAsync(`${id}.${state}`, val, true)},
-                context,
-                this.#timers
-            );
-        }
-    }
-
-    /* Messages statistic callback */
-    async _cbProcessMessageReceived(mac, payload) {
-        const id = String(mac).substr(2);
-
-        await this.setStateAsync(
-            `${id}.messages_stat`,
-            JSON.stringify(payload),
-            true
-        );
-    }
-
-    /* Callback for debug output purpose */
-    async _cbDebugOutput(mac, payload) {
-        const id = String(mac).substr(2);
-        const states = await this.getStatesAsync(`${id}.debug_output`);
-
-        try {
-            const debugOutputState = Array.of(states[`${this.namespace}.${id}.debug_output`])
-                .filter(el => el != undefined)
-                .filter(el => Object.keys(el).includes('val') && String(el.val).match(/^\{.+\}$/gm) != undefined)
-                .concat([{'val': '\{\}'}])[0];
-            const debugOutputStateVal = JSON.parse(debugOutputState.val);
-
-            const debugOutputPayloadVal = Object.assign({}, debugOutputStateVal, payload, {
-                'zigbeeProperties': payload.zigbeeProperties != undefined ?
-                    [].concat(debugOutputStateVal.zigbeeProperties || [], payload.zigbeeProperties)
-                        .filter((el, idx, arr) => arr.indexOf(el) === idx)
-                        .sort((a, b) => String(a).localeCompare(String(b), 'en-US-u-kn-true')) :
-                    undefined,
-                'bleProperties': payload.bleProperties != undefined ?
-                    [].concat(debugOutputStateVal.bleProperties || [], payload.bleProperties)
-                        .filter((el, idx, arr) => arr.indexOf(el) === idx)
-                        .sort((a, b) => String(a).localeCompare(String(b), 'en-US-u-kn-true')) :
-                    undefined
-            });
-
-            await this.setStateAsync(
-                `${id}.debug_output`,
-                JSON.stringify(debugOutputPayloadVal),
-                true
-            );
-        } catch (e) {
-            this.logger.error(e.stack);
+            state.setter(id, callback, context, this.#timers);
         }
     }
 
@@ -366,7 +325,7 @@ class XiaomiGateway3 extends utils.Adapter {
     async _cbFindOrCreateDevice(_device) {
         if (_device == undefined) return;
 
-        const {mac, model, specs, init} = _device;
+        const {mac, model, spec: deviceSpec, init} = _device;
         const objectId = String(mac).substr(2);
 
         /* set device (iob object) */
@@ -382,68 +341,36 @@ class XiaomiGateway3 extends utils.Adapter {
             }
         });
 
+        /* Spec states names */
+        const specStatesNames = [];
+
         /* */
-        for (let [spec, diff] of specs) {
+        for (let spec of deviceSpec) {
+            const stateName = spec.stateName;
+
             /* create state object if it is not exist */
-            await this.setObjectNotExistsAsync(`${objectId}.${spec}`, Object.assign({},
-                {
-                    '_id': `${this.namespace}.${objectId}.${spec}`,
-                    'type': 'state',
-                    'native': {},
-                    'common': {}
-                },
-                iob.normalizeStateObject(spec, diff)
+            await this.setObjectNotExistsAsync(`${objectId}.${stateName}`, Object.assign({},
+                {'_id': `${this.namespace}.${objectId}.${stateName}`},
+                spec.stateObject
             ));
             
             /* set init state value if it is exist */
-            const val = init[spec];
+            const val = init[stateName];
             
             if (val != undefined)
-                await this.setStateAsync(`${objectId}.${spec}`, iob.normalizeStateVal(spec, val), true);
+                await this.setStateAsync(`${objectId}.${stateName}`, val, true);
+
+            /* Collect states names */
+            specStatesNames.push(stateName);
         }
 
-        /* Get some config options */
-        const {debugOutput, msgReceivedStat} = this.config;
+        /* Delete ioBroker states (and objects) which have no mapped spec in device */
+        const deviceStates = await this.getStatesOfAsync(`${objectId}`);
+        const deviceStatesNames = deviceStates.map(({_id}) => (_id.split('.').slice(-1))[0]);
 
-        if (debugOutput) {
-            /* Create state object for debug outout if it is not exist */
-            await this.setObjectNotExistsAsync(`${objectId}.debug_output`, {
-                '_id': `${this.namespace}.${objectId}.debug_output`,
-                'type': 'state',
-                'native': {},
-                'common': {
-                    'role': 'state',
-                    'name': 'Debug output',
-                    'type': 'string',
-                    'read': true,
-                    'write': false
-                }
-            });
-        }
-
-        if (msgReceivedStat) {
-            /* Create state object for statistic if it is not exist */
-            await this.setObjectNotExistsAsync(`${objectId}.messages_stat`, {
-                '_id': `${this.namespace}.${objectId}.messages_stat`,
-                'type': 'state',
-                'native': {},
-                'common': {
-                    'role': 'state',
-                    'name': 'Messages statistic',
-                    'type': 'string',
-                    'read': true,
-                    'write': false
-                }
-            });
-
-            await this.setStateAsync(`${objectId}.messages_stat`, '', true);
-        } else {
-            /* Looking for state which contains statistic and delete state and object if they are exists */
-            const states = await this.getStatesOfAsync(`${objectId}`);
-            const _id = (states.find(el => el._id == `${this.namespace}.${objectId}.messages_stat`) || {})._id;
-
-            if (_id != undefined) {
-                const id = _id.split('.').slice(-2).join('.');
+        for (let stateName of deviceStatesNames) {
+            if (!specStatesNames.includes(stateName)) {
+                const id = `${this.namespace}.${objectId}.${stateName}`;
 
                 await this.deleteStateAsync(id);
                 await this.delObjectAsync(id);
