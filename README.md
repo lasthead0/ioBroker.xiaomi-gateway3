@@ -128,7 +128,7 @@ __*!!Attantion:*__ Firmware versions lower than `1.4.7_0000` adapter not support
 - [ ] Xiaomi Flower Pot (HHCCPOT002)
 - [ ] Xiaomi Magic Cube (XMMF01JQD)
 - [ ] Xiaomi Mosquito Repellent (WX08ZM)
-- [ ] Xiaomi Motion Sensor 2 (RTCGQ02LM)
+- [x] Xiaomi Motion Sensor 2 (RTCGQ02LM)
 - [ ] Xiaomi Night Light 2 (MJYD02YL-A)
 - [ ] Xiaomi Qingping Door Sensor (CGH1)
 - [ ] Xiaomi Qingping Motion Sensor (CGPR1)
@@ -200,9 +200,11 @@ Move devices DB files to memory. This can improve work zigbee and bluetooth devi
 
 <img src="static/tab-statistic.png">
 
-_**Note:** Statistic don't load by default on page open. You have to use button `RELOAD` to update statistic on page._
+- Statistic don't load by default on page open. You have to use button `RELOAD` to update statistic on page.
 
-_**Note 2:** You should to keep in mind this is not really statistic of zigbee messages between gateway and device (zigbee protocol statistic). This is statistic of messages  which get adapter. What does it means? No differences for adapter is gateway don't get message from device or adapter himself don't get message from gateway (by MQTT). And if by any cases (Wi-Fi connection problem, for example) adapter don't get messages from gateway it interpritate this messages as missed, but actualy zigbee is ok._
+- Also you can clear statistic with button `CLEAR`. This does not clean statistic actually as it is. You just clear states which hold statistic. This can be useful in case adapter restart because ioBroker states don't clear on restart.
+
+_**Attantion:** You should to keep in mind this is not really statistic of zigbee messages between gateway and device (zigbee protocol statistic). This is statistic of messages  which get adapter. What does it means? No differences for adapter is gateway don't get message from device or adapter himself don't get message from gateway (by MQTT). And if by any cases (Wi-Fi connection problem, for example) adapter don't get messages from gateway it interpritate this messages as missed, but actualy zigbee is ok._
 
 
 ## Changelog
@@ -210,6 +212,12 @@ _**Note 2:** You should to keep in mind this is not really statistic of zigbee m
     Placeholder for the next version (at the beginning of the line):
     ### **WORK IN PROGRESS**
 -->
+### **WORK IN PROGRESS**
+* Added states classes and rewrote code with using them
+* Added tab-page of adapter
+* Added zigbee (lumi) devices statistic
+* A lot of code improvements
+
 ### 0.1.0 (2021-11-09)
 * (Evgenii Abramov) Added support for BLE devices (needed tests)
 * (Evgenii Abramov) Improvements for zigbee and BLE support
