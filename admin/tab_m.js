@@ -19,7 +19,7 @@ function load(settings, onChange) {
     });
 
     $('#reload-stat').on('click', () => {
-        const $this = $('#get-devices');
+        const $this = $('#reload-stat');
         const $loader = $('#loader1');
         
         $this.addClass('disabled');
@@ -49,6 +49,30 @@ function load(settings, onChange) {
                     $tableBody.append(tr);
                 }
             }
+
+            $this.removeClass('disabled');
+            $loader.addClass('hidden');
+        });
+    });
+
+    $('#clear-stat').on('click', () => {
+        const $this = $('#clear-stat');
+        const $loader = $('#loader1');
+        
+        $this.addClass('disabled');
+        $loader.removeClass('hidden');
+
+        sendTo(namespace, 'ClearMessagesStat', {}, function () {
+            const $tableBody = $('#table-stats > tbody');
+
+            $tableBody.empty();
+
+            const td = Array.from({length: 9}).fill(`<td>?</td>`);
+            let tr = $('<tr></tr>').append(td.join('\n'));
+
+            // tr.append(td.join('\n'));
+
+            $tableBody.append(tr);
 
             $this.removeClass('disabled');
             $loader.addClass('hidden');

@@ -145,8 +145,9 @@ class XiaomiGateway3 extends utils.Adapter {
             const handlers = {
                 'GetGatewayFromCloud': this._msgGetGatewayFromCloud.bind(this),
                 'GetMessagesStat': this._msgGetMessagesStat.bind(this),
+                'ClearMessagesStat': this._msgClearMessagesStat.bind(this),
                 'PingGateway3': this._msgPingGateway3.bind(this),
-                'CheckTelnet': this._msgCheckTelnet.bind(this)
+                'CheckTelnet': this._msgCheckTelnet.bind(this),
             };
 
             await handlers[command](from, command, message, callback);
@@ -191,6 +192,23 @@ class XiaomiGateway3 extends utils.Adapter {
         }
         
         if (callback) this.sendTo(from, command, msgStatObjects, callback);
+    }
+
+    /* */
+    async _msgClearMessagesStat(from, command, message, callback) {
+        const devices = await this.getDevicesAsync();
+
+        let msgStatObjects = [];
+
+        for (let d of devices) {
+            const _id = `${d.native.id}.messages_stat`;
+            const state = await this.getStateAsync(_id);
+
+            if (state != undefined)
+                await this.setStateAsync(_id, null, true);
+        }
+        
+        if (callback) this.sendTo(from, command, undefined, callback);
     }
 
     /* 'PingGateway3' message handler */
