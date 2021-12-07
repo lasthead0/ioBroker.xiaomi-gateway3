@@ -212,7 +212,7 @@ _**Attantion:** You should to keep in mind this is not really statistic of zigbe
     Placeholder for the next version (at the beginning of the line):
     ### **WORK IN PROGRESS**
 -->
-### **WORK IN PROGRESS**
+### 0.2.0 (2021-12-07)
 * Added states classes and rewrote code with using them
 * Added tab-page of adapter
 * Added zigbee (lumi) devices statistic
@@ -226,7 +226,6 @@ _**Attantion:** You should to keep in mind this is not really statistic of zigbe
 
 ### 0.0.1-alpha.0 (2021-10-13)
 * (Evgenii Abramov) Initial release
-
 
 ## License
 MIT License
