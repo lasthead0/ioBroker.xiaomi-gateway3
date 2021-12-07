@@ -1,11 +1,11 @@
-![Logo](admin/xiaomi-gateway3.png)
+<img src="static/xiaomi-gateway3_logo.png" alt="Logo" width="150"/>
+
 # ioBroker.xiaomi-gateway3
 
 [![NPM version](https://img.shields.io/npm/v/iobroker.xiaomi-gateway3.svg)](https://www.npmjs.com/package/iobroker.xiaomi-gateway3)
 [![Downloads](https://img.shields.io/npm/dm/iobroker.xiaomi-gateway3.svg)](https://www.npmjs.com/package/iobroker.xiaomi-gateway3)
 ![Number of Installations (latest)](https://iobroker.live/badges/xiaomi-gateway3-installed.svg)
-![Number of Installations (stable)](https://iobroker.live/badges/xiaomi-gateway3-stable.svg)
-[![Dependency Status](https://img.shields.io/david/lasthead0/iobroker.xiaomi-gateway3.svg)](https://david-dm.org/lasthead0/iobroker.xiaomi-gateway3)
+<!-- ![Number of Installations (stable)](https://iobroker.live/badges/xiaomi-gateway3-stable.svg) -->
 
 ![Test and Release](https://github.com/lasthead0/ioBroker.xiaomi-gateway3/workflows/Test%20and%20Release/badge.svg)
 
@@ -92,7 +92,7 @@ __*!!Attantion:*__ Firmware versions lower than `1.4.7_0000` adapter not support
 - [ ] Aqara Single Wall Switch E1 (QBKG38LM,QBKG40LM)
 - [ ] Aqara Single Wall Switch H1 (WS-EUK01)
 - [ ] Aqara Socket (QBCZ11LM)
-- [ ] Aqara TH Sensor (WSDCGQ11LM,WSDCGQ12LM)
+- [x] Aqara TH Sensor (WSDCGQ11LM,WSDCGQ12LM)
 - [ ] Aqara TVOC Air Quality Monitor (VOCKQJK11LM)
 - [ ] Aqara Thermostat S2 (KTWKQ03ES)
 - [ ] Aqara Triple Wall Switch D1 (QBKG25LM,QBKG26LM)
@@ -128,7 +128,7 @@ __*!!Attantion:*__ Firmware versions lower than `1.4.7_0000` adapter not support
 - [ ] Xiaomi Flower Pot (HHCCPOT002)
 - [ ] Xiaomi Magic Cube (XMMF01JQD)
 - [ ] Xiaomi Mosquito Repellent (WX08ZM)
-- [ ] Xiaomi Motion Sensor 2 (RTCGQ02LM)
+- [x] Xiaomi Motion Sensor 2 (RTCGQ02LM)
 - [ ] Xiaomi Night Light 2 (MJYD02YL-A)
 - [ ] Xiaomi Qingping Door Sensor (CGH1)
 - [ ] Xiaomi Qingping Motion Sensor (CGPR1)
@@ -146,11 +146,12 @@ __*!!Attantion:*__ Firmware versions lower than `1.4.7_0000` adapter not support
 
 _**Note:** BLE devices may not have states at first time after pairing because i don't know specs for devices and didn't define properties for all devices for now. States will added when device will update correponding propertie. I hope I will fix this over time with your help._
 
+
 ## Configuration
 
 To connect a gateway you need get IP and TOKEN of gateway. You can do this manually or from cloud.
 
-__*!!Attantion: There is issue with getting devices from cloud. I didn't get yet is this issue in code or with cloud, however you should try to get (to press button) devices several times, for now.*__
+_**Attantion:** There is issue with getting devices from cloud. I don't get yet is this issue with code or with cloud, however you should try to get (press button) devices several times (until you finally get), for now._
 
 Also you have to chose telnet open command (in most cases option #2). You can test connection and telnet by buttons.
 
@@ -168,6 +169,10 @@ You have several options to configure adapter and gatewey.
 
 - [x] __Debug output (to stete)__<br/>
 Adapter will doing output some debug info into state for each device.
+
+- [x] __Collect statistic__<br/>
+Adapter collect statistic about zigbee devices messages: how much received, how much missed and etc. Statistic stored to state at each device and can be viewed in 'tab' page (from sidebar menu). <br/>
+_**Note:** Adapter do reset statistic on restart._
 
 ### Basic Gateway3 settings
 
@@ -189,11 +194,30 @@ Set true to disable annoying buzzer signals or false to enable all signals.
 Move devices DB files to memory. This can improve work zigbee and bluetooth devices. __*But can occur losing some data. Use on your own risk.*__
 
 
+## Tab page
+
+### Statistic
+
+<img src="static/tab-statistic.png">
+
+- Statistic don't load by default on page open. You have to use button `RELOAD` to update statistic on page.
+
+- Also you can clear statistic with button `CLEAR`. This does not clean statistic actually as it is. You just clear states which hold statistic. This can be useful in case adapter restart because ioBroker states don't clear on restart.
+
+_**Attantion:** You should to keep in mind this is not really statistic of zigbee messages between gateway and device (zigbee protocol statistic). This is statistic of messages  which get adapter. What does it means? No differences for adapter is gateway don't get message from device or adapter himself don't get message from gateway (by MQTT). And if by any cases (Wi-Fi connection problem, for example) adapter don't get messages from gateway it interpritate this messages as missed, but actualy zigbee is ok._
+
+
 ## Changelog
 <!--
     Placeholder for the next version (at the beginning of the line):
     ### **WORK IN PROGRESS**
 -->
+### 0.2.0 (2021-12-07)
+* Added states classes and rewrote code with using them
+* Added tab-page of adapter
+* Added zigbee (lumi) devices statistic
+* A lot of code improvements
+
 ### 0.1.0 (2021-11-09)
 * (Evgenii Abramov) Added support for BLE devices (needed tests)
 * (Evgenii Abramov) Improvements for zigbee and BLE support

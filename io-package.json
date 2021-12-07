@@ -1,7 +1,7 @@
 {
   "common": {
     "name": "xiaomi-gateway3",
-    "version": "0.1.0",
+    "version": "0.2.0",
     "title": "xiaomi-gateway3",
     "titleLang": {
       "en": "Xiaomi Gateway 3",
@@ -51,6 +51,25 @@
     "type": "iot-systems",
     "compact": true,
     "materialize": true,
+    "materializeTab": true,
+    "adminTab": {
+      "ignoreConfigUpdate": true,
+      "singleton": false,
+      "name": {
+        "en": "Gateway 3",
+        "de": "Gateway 3",
+        "ru": "Gateway 3",
+        "pt": "Gateway 3",
+        "nl": "Gateway 3",
+        "fr": "Gateway 3",
+        "it": "Gateway 3",
+        "es": "Gateway 3",
+        "pl": "Gateway 3",
+        "zh-cn": "Gateway 3"
+      },
+      "link": "",
+      "fa-icon": "</i><img style='width: 20px; margin-bottom: -4px;' src='/adapter/xiaomi-gateway3/xiaomi-gateway3.png'><i>"
+    },
     "messagebox": true,
     "dependencies": [
       {
@@ -58,6 +77,18 @@
       }
     ],
     "news": {
+      "0.2.0": {
+        "en": "Added states classes and rewrote code with using them\nAdded tab-page of adapter\nAdded zigbee (lumi) devices statistic\nA lot of code improvements",
+        "de": "Statusklassen hinzugefügt und Code mit deren Verwendung neu geschrieben\nRegisterkarte des Adapters hinzugefügt\nStatistik für Zigbee (Lumi)-Geräte hinzugefügt\nViele Code-Verbesserungen",
+        "ru": "Добавлены классы состояний и переписан код с их использованием\nДобавлена вкладка адаптера\nДобавлена статистика устройств zigbee (lumi)\nМножество улучшений кода",
+        "pt": "Adicionou classes de estados e reescreveu o código para usá-los\nAdicionada página de guia do adaptador\nAdicionada estatística de dispositivos zigbee (lumi)\nMuitas melhorias de código",
+        "nl": "Statusklassen toegevoegd en code herschreven door ze te gebruiken\nTabblad van adapter toegevoegd\nStatistiek van zigbee (lumi) apparaten toegevoegd\nVeel codeverbeteringen",
+        "fr": "Ajout de classes d'états et réécriture du code en les utilisant\nAjout de la page à onglet de l'adaptateur\nAjout de la statistique des appareils zigbee (lumi)\nBeaucoup d'améliorations de code",
+        "it": "Aggiunte classi di stati e riscritto il codice utilizzandole\nAggiunta scheda-pagina dell'adattatore\nAggiunta statistica dispositivi zigbee (lumi)\nMolti miglioramenti al codice",
+        "es": "Se agregaron clases de estados y se reescribió el código con su uso\nPágina de pestaña agregada del adaptador\nEstadísticas de dispositivos zigbee (lumi) agregadas\nMuchas mejoras de código",
+        "pl": "Dodano klasy stanów i przepisano kod z ich użyciem\nDodano zakładkę adaptera\nDodano statystykę urządzeń zigbee (lumi)\nWiele ulepszeń kodu",
+        "zh-cn": "添加状态类并使用它们重写代码\n增加了适配器标签页\n添加了 zigbee (lumi) 设备统计信息\n大量代码改进"
+      },
       "0.1.0": {
         "en": "Added support for BLE devices (needed tests)\nImprovements for zigbee and BLE support\nAdded output for debug purpose\nA lot of code improvements",
         "de": "Unterstützung für BLE-Geräte hinzugefügt (benötigte Tests)\nVerbesserungen für Zigbee- und BLE-Unterstützung\nAusgabe für Debug-Zwecke hinzugefügt\nViele Code-Verbesserungen",
@@ -94,6 +125,7 @@
     "debugLog": false,
     "dLogMQTT": false,
     "debugOutput": false,
+    "msgReceivedStat": false,
     "gwEnableTelnet": true,
     "gwEnablePublicMqtt": true,
     "gwLockFirmware": false,

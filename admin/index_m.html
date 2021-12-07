@@ -22,19 +22,12 @@
 
 <body>
     <div class="m adapter-container">
-        <!-- <div class="row">
-            <div class="col s12 m4 l2">
-                <img src="xiaomi-gateway3.png" class="logo">
-            </div>
-        </div> -->
-
         <div class="row navbar-fixed" style="height: 48px;">
             <nav class="nav-extended">
                 <div class="nav-content">
                     <ul class="tabs tabs-transparent">
                         <li class="tab col s2"><a href="#tab-main" id="tab_main" class="translate tooltipped">Main</a></li>
                         <li class="tab col s2"><a href="#tab-settings" id="tab_settings" class="translate tooltipped">Settings</a></li>
-                        <!-- <li class="tab col s2"><a href="#tab-devices" id="tab_devices" class="translate tooltipped">Devices</a></li> -->
                     </ul>
                 </div>
             </nav>
@@ -135,7 +128,7 @@
                 <div class="row">
                     <div class="col s12">
                         <h6 class="title blue darken-1 translate" style="margin-top: 0px;">Adapter Settings
-                            <a  href="https://github.com/lasthead0/ioBroker.xiaomi-gateway3/blob/master/README.md" 
+                            <a  href="https://github.com/lasthead0/ioBroker.xiaomi-gateway3/blob/master/README.md#adapter-settings" 
                                 target="_blank"
                             >
                                 <i class="tiny material-icons" style="color: #ffffff; font-size: 1.4rem; margin-left: 10px;">live_help</i>
@@ -156,6 +149,11 @@
                                         <input id="debugOutput" type="checkbox" class="value filled-in"/>
                                         <span class="translate">Debug output (to state)</span>
                                     </div>
+                                    <div class="col in-card-separator"></div>
+                                    <div class="col input-field text-grey" style="margin-left: 12px;">
+                                        <input id="msgReceivedStat" type="checkbox" class="value filled-in"/>
+                                        <span class="translate">Collect statistic</span>
+                                    </div>
                                 </div>
                             </div>
                         </div>
@@ -164,7 +162,7 @@
                 <div class="row">
                     <div class="col s12">
                         <h6 class="title blue darken-1 translate" style="margin-top: 0px;">Gateway3 Settings
-                            <a  href="https://github.com/lasthead0/ioBroker.xiaomi-gateway3/blob/master/README.md" 
+                            <a  href="https://github.com/lasthead0/ioBroker.xiaomi-gateway3/blob/master/README.md#basic-gateway3-settings" 
                                 target="_blank"
                             >
                                 <i class="tiny material-icons" style="color: #ffffff; font-size: 1.4rem; margin-left: 10px;">live_help</i>
@@ -197,7 +195,7 @@
                 <div class="row">
                     <div class="col s12">
                         <h6 class="title blue darken-1 translate" style="margin-top: 0px;">Gateway3 Settings (Advanced)
-                            <a  href="https://github.com/lasthead0/ioBroker.xiaomi-gateway3/blob/master/README.md" 
+                            <a  href="https://github.com/lasthead0/ioBroker.xiaomi-gateway3/blob/master/README.md#advanced-gateway3-settings" 
                                 target="_blank"
                             >
                                 <i class="tiny material-icons" style="color: #ffffff; font-size: 1.4rem; margin-left: 10px;">live_help</i>
@@ -216,11 +214,6 @@
                     </div>
                 </div>
             </div>
-            <!-- <div id="tab-devices" class="col s12 page">
-                <div id="devices" class="row">
-                    aa
-                </div>
-            </div> -->
         </div>
     </div>
 </body>

@@ -1,0 +1,120 @@
+<html>
+
+<head>
+    <!-- Load ioBroker scripts and styles-->
+    <link rel="stylesheet" type="text/css" href="../../css/adapter.css" />
+    <link rel="stylesheet" type="text/css" href="../../lib/css/materialize.css">
+
+    <script type="text/javascript" src="../../lib/js/jquery-3.2.1.min.js"></script>
+    <script type="text/javascript" src="../../socket.io/socket.io.js"></script>
+
+    <script type="text/javascript" src="../../js/translate.js"></script>
+    <script type="text/javascript" src="../../lib/js/materialize.js"></script>
+    <script type="text/javascript" src="../../js/adapter-settings.js"></script>
+
+    <!-- Load our own files -->
+    <script type="text/javascript" src="tab_m.js"></script>
+    <link rel="stylesheet" type="text/css" href="index_m.css" />
+    <script type="text/javascript" src="words.js"></script>
+
+    <style>
+        .adapter-body {
+            height: 100%;
+        }
+        body > div:nth-child(2) {
+            display: none !important;
+        }
+        #table-stats tr > td:nth-child(2) {
+            width: 250px !important;
+        }
+        #table-stats tr > td:nth-child(3) {
+            width: 100px !important;
+        }
+        #table-stats tr > td:nth-child(4) {
+            width: 120px !important;
+        }
+        #table-stats tr > td:nth-child(5) {
+            width: 120px !important;
+        }
+        #table-stats tr > td:nth-child(6) {
+            width: 150px !important;
+        }
+        #table-stats tr > td:nth-child(7) {
+            width: 80px !important;
+        }
+        #table-stats tr > td:nth-child(8) {
+            width: 80px !important;
+        }
+        #table-stats tr > td:nth-child(9) {
+            width: 300px !important;
+        }
+    </style>
+    <!-- <script type="text/javascript"></script> -->
+</head>
+
+<body>
+    <div class="m adapter-container">
+        <div class="row navbar-fixed" style="height: 48px;">
+            <nav class="nav-extended">
+                <div class="nav-content">
+                    <ul class="tabs tabs-transparent">
+                        <li class="tab col s2"><a href="#tab-stat" id="tab_stat" class="translate tooltipped">statistic</a></li>
+                    </ul>
+                </div>
+            </nav>
+        </div>
+        <div id="tabs" class="tabs-content row">
+            <div id="tab-stat" class="col s12 page active">
+                <div class="row">
+                    <div class="col">
+                        <a id="reload-stat" class="waves-effect waves-light btn"><i class="material-icons right">refresh</i>reload</a>
+                    </div>
+                    <div class="col">
+                        <a id="clear-stat" class="waves-effect waves-light btn"><i class="material-icons right">delete_forever</i>clear</a>
+                    </div>
+                    <div class="col">
+                        <div id="loader1" class="loader hidden"> </div>
+                    </div>
+                </div>
+                <div class="row">
+                    <div class="col s12">
+                        <div class="card grey lighten-5">
+                            <div class="card-content">
+                                <table id="table-stats" class="responsive-table highlight grey-text text-darken-3">
+                                    <thead>
+                                        <tr>
+                                            <th>Name</th>
+                                            <th>did</th>
+                                            <th>NWK</th>
+                                            <th>Received</th>
+                                            <th>Missed</th>
+                                            <th>Unresponsive</th>
+                                            <th>LQI</th>
+                                            <th>RSSI</th>
+                                            <th>Last seen</th>
+                                        </tr>
+                                    </thead>
+                                    <tbody>
+                                        <tr>
+                                            <td>?</td>
+                                            <td>?</td>
+                                            <td>?</td>
+                                            <td>?</td>
+                                            <td>?</td>
+                                            <td>?</td>
+                                            <td>?</td>
+                                            <td>?</td>
+                                            <td>?</td>
+                                        </tr>
+                                    </tbody>
+                                </table>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</body>
+
+</html>
