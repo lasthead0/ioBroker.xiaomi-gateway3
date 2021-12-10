@@ -1,7 +1,7 @@
 {
   "common": {
     "name": "xiaomi-gateway3",
-    "version": "0.2.0",
+    "version": "0.3.0",
     "title": "xiaomi-gateway3",
     "titleLang": {
       "en": "Xiaomi Gateway 3",
@@ -77,6 +77,18 @@
       }
     ],
     "news": {
+      "0.3.0": {
+        "en": "Improved adapter logging",
+        "de": "Verbesserte Adapterprotokollierung",
+        "ru": "Улучшено ведение журнала адаптера",
+        "pt": "Registro de adaptador aprimorado",
+        "nl": "Verbeterde adapterregistratie",
+        "fr": "Journalisation améliorée de l'adaptateur",
+        "it": "Registrazione dell'adattatore migliorata",
+        "es": "Registro de adaptador mejorado",
+        "pl": "Ulepszone rejestrowanie adapterów",
+        "zh-cn": "改进的适配器日志记录"
+      },
       "0.2.0": {
         "en": "Added states classes and rewrote code with using them\nAdded tab-page of adapter\nAdded zigbee (lumi) devices statistic\nA lot of code improvements",
         "de": "Statusklassen hinzugefügt und Code mit deren Verwendung neu geschrieben\nRegisterkarte des Adapters hinzugefügt\nStatistik für Zigbee (Lumi)-Geräte hinzugefügt\nViele Code-Verbesserungen",

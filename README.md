@@ -226,7 +226,7 @@ _**Attantion:** You should to keep in mind this is not really statistic of zigbe
     Placeholder for the next version (at the beginning of the line):
     ### **WORK IN PROGRESS**
 -->
-### **WORK IN PROGRESS**
+### 0.3.0 (2021-12-10)
 - Improved adapter logging
 
 ### 0.2.0 (2021-12-07)
