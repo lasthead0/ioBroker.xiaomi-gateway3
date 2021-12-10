@@ -167,12 +167,12 @@ You have several options to configure adapter and gatewey.
 
 ### Adapter settings
 
-- [x] __Debug output (to stete)__<br/>
-Adapter will doing output some debug info into state for each device.
-
 - [x] __Collect statistic__<br/>
 Adapter collect statistic about zigbee devices messages: how much received, how much missed and etc. Statistic stored to state at each device and can be viewed in 'tab' page (from sidebar menu). <br/>
 _**Note:** Adapter do reset statistic on restart._
+
+- [x] __Debug output (to state)__<br/>
+Adapter will doing output some debug info into state for each device.
 
 ### Basic Gateway3 settings
 
@@ -193,6 +193,20 @@ Set true to disable annoying buzzer signals or false to enable all signals.
 - [x] __Storage in memory (Beta)__ <br/>
 Move devices DB files to memory. This can improve work zigbee and bluetooth devices. __*But can occur losing some data. Use on your own risk.*__
 
+### Logging settings
+
+- [x] __Debug log__<br/>
+Enable debug logging. If disabled other logging options has no effect.
+
+- [x] __Lumi MQTT messages__<br/>
+Enable MQTT messages logging of Lumi (zigbee) devices.
+
+- [x] __Ble MQTT messages__<br/>
+Enable MQTT messages logging of BLE devices.
+
+- [x] __All the rest__<br/>
+Enable all other adapter messages.
+
 
 ## Tab page
 
@@ -200,7 +214,7 @@ Move devices DB files to memory. This can improve work zigbee and bluetooth devi
 
 <img src="static/tab-statistic.png">
 
-- Statistic don't load by default on page open. You have to use button `RELOAD` to update statistic on page.
+- Statistics are not loaded by default. You have to use button `RELOAD` to update statistic on page.
 
 - Also you can clear statistic with button `CLEAR`. This does not clean statistic actually as it is. You just clear states which hold statistic. This can be useful in case adapter restart because ioBroker states don't clear on restart.
 
