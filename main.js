@@ -44,26 +44,27 @@ class XiaomiGateway3 extends utils.Adapter {
 	    this.subscribeStates('*');
 
         /* Adapter logging options */
-        const {debugLog, dLogMQTT} = this.config;
+        const {debugLog, dLogAllTheRest, dLogMQTTLumi, dLogMQTTBle} = this.config;
 
         /* Adapter logger */
         this.logger = {
             'info': this.log.info,
             'error': this.log.error,
-            'debug': (([d, ...log]) => {
-                if (d) {
-                    const [MQTT,] = log;
+            'debug': ((dLog, dLogAllTheRest, ...log) => {
+                if (dLog) {
+                    const [LUMI, BLE,] = log;
 
                     return msg => {
                         if (typeof msg === 'string') {
-                            const logs = {MQTT};
+                            const logs = {LUMI, BLE};
                             const allowed = [(msg.match(/^\([\w]+\)/g) || [''])[0].match(/[A-Z]+/g)][0];
 
                             if (allowed != undefined) {
                                 if (logs[allowed] == true)
                                     this.log.debug(msg);
                             } else {
-                                this.log.debug(msg);
+                                if (dLogAllTheRest == true)
+                                    this.log.debug(msg);
                             }
                         } else {
                             this.log.debug(msg);
@@ -72,7 +73,7 @@ class XiaomiGateway3 extends utils.Adapter {
                 } else {
                     return () => {};
                 }
-            })([debugLog, dLogMQTT])
+            })(debugLog, dLogAllTheRest, dLogMQTTLumi, dLogMQTTBle)
         };
 
         /* */
@@ -255,16 +256,16 @@ class XiaomiGateway3 extends utils.Adapter {
 
     /* MQTT on 'message' event callback */
     async _onMqttMessage(topic, msg) {
-        this.logger.debug(`(_MQTT_) ${topic} ${msg}`);
-
         if (String(msg).match(/^\{.+\}$/gm) != undefined) {
             try {
                 const msgObject = JSON.parse(msg);
 
                 /* */
                 if (topic.match(/^zigbee\/send$/gm)) {
+                    this.logger.debug(`(_LUMI_) ${topic} ${msg}`);
                     this.gateway3.processMessageLumi(msgObject, this._cbProcessMessage.bind(this));
                 }  else if (topic.match(/^log\/ble$/gm)) {
+                    this.logger.debug(`(_BLE_) ${topic} ${msg}`);
                     this.gateway3.processMessageBle(msgObject, this._cbProcessMessage.bind(this));
                 }  else if (topic.match(/^log\/miio$/gm)) {
                     // TODO: or not TODO:
