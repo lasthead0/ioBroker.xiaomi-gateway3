@@ -10,6 +10,9 @@ const {MiioHelper, Gateway3Helper} = require('./lib/helpers');
 const XiaomiCloud = require('./lib/xiaomiCloud');
 const Gateway3 = require('./lib/gateway3');
 
+global.sleepTimeouts = {};
+global.stateSetterTimeouts = {};
+
 class XiaomiGateway3 extends utils.Adapter {
     #mqttc = undefined;
     /* {error, debug} */
@@ -18,8 +21,6 @@ class XiaomiGateway3 extends utils.Adapter {
         'error': undefined,
         'debug': undefined
     };
-
-    #stateSetterTimers = {};
 
     constructor(options) {
         super(Object.assign(options || {}, {
@@ -34,8 +35,6 @@ class XiaomiGateway3 extends utils.Adapter {
 
     set logger(l) {this.#_LOGGER = l}
     get logger() {return this.#_LOGGER}
-
-    get stateSetterTimers() {return this.#stateSetterTimers};
 
     /* Adapter 'ready' event handler */
     async onReady() {
@@ -155,6 +154,29 @@ class XiaomiGateway3 extends utils.Adapter {
         }
     }
 
+    /* Adapter 'unload' event handler */
+    onUnload(callback) {
+        try {
+            this.setState('info.connection', false, true);
+
+            /* clear timeouts */
+            for (let t of [].concat(Object.values(global.stateSetterTimeouts), Object.values(global.sleepTimeouts)))
+                clearTimeout(t);
+
+            /* close mqtt client */
+            if (this.#mqttc != undefined)
+                this.#mqttc.end();
+
+            callback();
+        } catch (error) {
+            if (error)
+                this.logger.error(`Unload error (${error.stack})`);
+
+            this.sendError(error, `Unload error`);
+            callback();
+        }
+    }
+
     /* 'GetGatewayFromCloud' message handler */
     async _msgGetGatewayFromCloud(from, command, message, callback) {
         const {email, password, server} = message;
@@ -230,30 +252,6 @@ class XiaomiGateway3 extends utils.Adapter {
         if (callback) this.sendTo(from, command, avbl, callback);
     }
     
-    /* Adapter 'unload' event handler */
-    onUnload(callback) {
-        try {
-            this.setState('info.connection', false, true);
-
-            /* clear stateSetterTimers */
-            for (let t of Object.values(this.stateSetterTimers))
-                clearTimeout(t);
-            this.#stateSetterTimers = undefined;
-
-            /* close mqtt client */
-            if (this.#mqttc != undefined)
-                this.#mqttc.end();
-
-            callback();
-        } catch (error) {
-            if (error)
-                this.logger.error(`Unload error (${error.stack})`);
-
-            this.sendError(error, `Unload error`);
-            callback();
-        }
-    }
-
     /* MQTT on 'connect' event callback */
     async _onMqttConnect() {
         this.#mqttc.subscribe('#');
@@ -338,7 +336,7 @@ class XiaomiGateway3 extends utils.Adapter {
             const callback = async val => {await this.setStateAsync(`${id}.${stateName}`, val, true)};
 
             /* Execute state setter function for each state of payload */
-            state.setter(id, callback, context, this.#stateSetterTimers);
+            state.setter(id, callback, context, global.stateSetterTimeouts);
         }
     }
 
