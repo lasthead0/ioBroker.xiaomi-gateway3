@@ -226,8 +226,12 @@ _**Attantion:** You should to keep in mind this is not really statistic of zigbe
     Placeholder for the next version (at the beginning of the line):
     ### **WORK IN PROGRESS**
 -->
+### 0.3.1 (2022-01-17)
+* Bug fixes and code improvements
+* Improved support firmware 1.5.1_0032 and some devices
+
 ### 0.3.0 (2021-12-10)
-- Improved adapter logging
+* Improved adapter logging
 
 ### 0.2.0 (2021-12-07)
 * Added states classes and rewrote code with using them
