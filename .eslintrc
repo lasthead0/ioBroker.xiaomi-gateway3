@@ -38,7 +38,7 @@
             "error",
             {"blankLine": "always", "prev": ["const", "let", "var"], "next": "*"},
             {"blankLine": "always", "prev": "*", "next": ["return"]},
-            {"blankLine": "any", "prev": ["const", "let", "var"], "next": ["const", "let", "var", "return"]}
+            {"blankLine": "any", "prev": ["const", "let", "var"], "next": ["const", "let", "var", "return", "for"]}
         ]
     }
 }
