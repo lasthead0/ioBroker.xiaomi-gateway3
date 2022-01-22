@@ -277,6 +277,8 @@ class XiaomiGateway3 extends utils.Adapter {
                     // Gateway heartbeats (don't handle for now)
                 } else if (topic.match(/\/(MessageReceived|devicestatechange)$/gm)) {
                     this.gateway3.processMessageReceived(msgObject, this._cbProcessMessage.bind(this));
+                } else if (topic.match(/^zigbee\/recv$/gm)) {
+                    this.logger.debug(`(_LUMI_) ${topic} ${msg}`);
                 }
             } catch (e) {
                 this.logger.error(e.stack);
