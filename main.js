@@ -131,7 +131,10 @@ class XiaomiGateway3 extends utils.Adapter {
         const [_id, _state] = id.split('.').slice(-2);
 
         if (state != undefined && state.ack == false) {
-            this.gateway3.sendMessage(_id, {[_state]: state.val}, this._cbSendMqttMessage.bind(this));
+            const {val, ts} = state;
+
+            this.gateway3.sendMessage(_id, {[_state]: val}, this._cbSendMqttMessage.bind(this));
+            this.setState(id, {val, ts, ack: true});
         } else if (state != undefined && state.ack == true) {
             //
         }
