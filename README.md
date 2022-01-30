@@ -250,6 +250,11 @@ _**Attantion:** You should to keep in mind this is not really statistic of zigbe
     Placeholder for the next version (at the beginning of the line):
     ### **WORK IN PROGRESS**
 -->
+### 0.3.2 (2022-01-30)
+* Bug fixes and code improvements
+* Add curtain and buttons support
+* Update README
+
 ### 0.3.1 (2022-01-17)
 * Bug fixes and code improvements
 * Improved support firmware 1.5.1_0032 and some devices
@@ -294,3 +299,7 @@ AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
 LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
 OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
 SOFTWARE.
+
+<!--
+    npm run release -- -p iobroker --all --dry
+-->

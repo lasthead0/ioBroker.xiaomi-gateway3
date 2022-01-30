@@ -1,7 +1,7 @@
 {
   "common": {
     "name": "xiaomi-gateway3",
-    "version": "0.3.1",
+    "version": "0.3.2",
     "title": "xiaomi-gateway3",
     "titleLang": {
       "en": "Xiaomi Gateway 3",
@@ -82,6 +82,18 @@
       }
     ],
     "news": {
+      "0.3.2": {
+        "en": "Bug fixes and code improvements\nAdd curtain and buttons support\nUpdate README",
+        "de": "Fehlerbehebungen und Codeverbesserungen\nUnterstützung für Vorhänge und Knöpfe hinzufügen\nREADME aktualisieren",
+        "ru": "Исправления ошибок и улучшения кода\nДобавить поддержку шторки и кнопок\nОбновить README",
+        "pt": "Correções de bugs e melhorias de código\nAdicionar suporte para cortinas e botões\nAtualizar README",
+        "nl": "Bugfixes en codeverbeteringen\nOndersteuning voor gordijn en knopen toevoegen\nUpdate README",
+        "fr": "Corrections de bogues et améliorations du code\nAjouter la prise en charge des rideaux et des boutons\nMettre à jour le fichier LISEZMOI",
+        "it": "Correzioni di bug e miglioramenti del codice\nAggiungi supporto per tende e bottoni\nAggiorna LEGGIMI",
+        "es": "Corrección de errores y mejoras de código.\nAñade soporte para cortinas y botones.\nActualizar LÉAME",
+        "pl": "Poprawki błędów i ulepszenia kodu\nDodaj obsługę zasłon i przycisków\nZaktualizuj README",
+        "zh-cn": "错误修复和代码改进\n添加窗帘和按钮支持\n更新自述文件"
+      },
       "0.3.1": {
         "en": "Bug fixes and code improvements\nImproved support firmware 1.5.1_0032 and some devices",
         "de": "Fehlerbehebungen und Codeverbesserungen\nVerbesserte Unterstützung für Firmware 1.5.1_0032 und einige Geräte",
