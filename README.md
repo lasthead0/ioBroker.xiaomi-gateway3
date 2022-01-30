@@ -59,7 +59,7 @@ __*!!Attantion:*__ Firmware versions lower than `1.4.7_0000` adapter not support
 - [ ] Aqara Bulb (ZNLDP12LM)
 - [ ] Aqara Button (WXKG11LM)
 - [ ] Aqara Cube (MFKZQ01LM)
-- [ ] Aqara Curtain (ZNCLDJ11LM)
+- [x] Aqara Curtain (ZNCLDJ11LM)
 - [ ] Aqara Curtain B1 (ZNCLDJ12LM)
 - [ ] Aqara Door Lock S1 (ZNMS11LM)
 - [ ] Aqara Door Lock S2 (ZNMS12LM)
@@ -82,7 +82,7 @@ __*!!Attantion:*__ Firmware versions lower than `1.4.7_0000` adapter not support
 - [ ] Aqara Precision Motion Sensor (RTCGQ13LM)
 - [ ] Aqara Relay (LLKZMK11LM)
 - [ ] Aqara Relay T1 (DLKZMK11LM,SSM-U01,SSM-U02)
-- [ ] Aqara Roller Shade (ZNGZDJ11LM)
+- [x] Aqara Roller Shade (ZNGZDJ11LM)
 - [ ] Aqara Roller Shade E1 (ZNJLBL01LM)
 - [ ] Aqara Shake Button (WXKG12LM)
 - [ ] Aqara Single Wall Button (WXKG03LM)
@@ -106,7 +106,7 @@ __*!!Attantion:*__ Firmware versions lower than `1.4.7_0000` adapter not support
 - [ ] IKEA Bulb E27 950 lm (LED1546G12)
 - [ ] IKEA Bulb E27 980 lm (LED1545G12)
 - [ ] IKEA Bulb GU10 400 lm (LED1537R6,LED1650R5)
-- [ ] Xiaomi Button (WXKG01LM)
+- [x] Xiaomi Button (WXKG01LM)
 - [x] Xiaomi Door Sensor (MCCGQ01LM)
 - [ ] Xiaomi Light Sensor (GZCGQ01LM)
 - [ ] Xiaomi Motion Sensor (RTCGQ01LM)
@@ -141,10 +141,32 @@ __*!!Attantion:*__ Firmware versions lower than `1.4.7_0000` adapter not support
 - [ ] Xiaomi Toothbrush T500 (MES601)
 - [ ] Xiaomi Water Leak Sensor (SJWS01LM)
 - [ ] Xiaomi ZenMeasure Clock (MHO-C303)
-- [ ] Xiaomi ZenMeasure TH (MHO-C401)
+- [x] Xiaomi ZenMeasure TH (MHO-C401)
 - [ ] Yeelight Button S1 (YLAI003)
 
 _**Note:** BLE devices may not have states at first time after pairing because i don't know specs for devices and didn't define properties for all devices for now. States will added when device will update correponding propertie. I hope I will fix this over time with your help._
+
+
+## Some states description
+
+### `Button long press`
+
+For button devices you can see combination of two states (like) `long_press` and `long_timeout`.
+How dos it work? Buttons which support long press sends message on press and on relese event. Some times can happed situation when button not sent message on release button. In this case `timeout` should help to "release" state.
+
+By default `timeout` state value unset and `long_press` will be released in 1 second after start holding button even if you still hold it.  If you set `long_timeout` to -1 timeout will be ignored at all and state will be "released" only by message from button.
+
+In most cases reasonable to set `timeout` to some small value like 4 or 5 seconds.
+
+### `Occupancy` and `Occupancy timeout`
+
+RTCGQ11LM and other motion sensors have delay (timeout) after motion detect from 5 to 60 second (depends on versions and modifications). This means that new motion can't be detected during this period (technicly sensor does not send message).
+
+`occupancy` become _**true**_ when sensor detect motion and stay _**true**_.
+
+Goal of `occupancy_timeout` is set `occupancy` to _**false**_ when sensor can send message again. By default `occupancy_timeout` is not set and `occupancy` turn back to _**false**_ after 60 seconds. If your sensor have different delay it's better to set `occupancy_timeout` to that delay value.
+
+If you want to back to _**false**_ right after motion detected you can set `occupancy_timeout` to 1 second.
 
 
 ## Configuration
@@ -194,6 +216,8 @@ Set true to disable annoying buzzer signals or false to enable all signals.
 Move devices DB files to memory. This can improve work zigbee and bluetooth devices. __*But can occur losing some data. Use on your own risk.*__
 
 ### Logging settings
+
+_**Note: To see debug messages in ioBroker log you have to set `debug` log level  for adapter under `Instances` page (toggle expert mode into enabled)**_
 
 - [x] __Debug log__<br/>
 Enable debug logging. If disabled other logging options has no effect.
