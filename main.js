@@ -372,20 +372,25 @@ class XiaomiGateway3 extends utils.Adapter {
         const specStatesNames = [];
 
         /* */
-        for (let spec of deviceSpec) {
-            const stateName = spec.stateName;
+        for (let state of deviceSpec) {
+            const stateName = state.stateName;
+            const _id = `${objectId}.${stateName}`;
 
             /* create state object if it is not exist */
-            await this.setObjectNotExistsAsync(`${objectId}.${stateName}`, Object.assign({},
-                {'_id': `${this.namespace}.${objectId}.${stateName}`},
-                spec.stateObject
+            await this.setObjectNotExistsAsync(_id, Object.assign({},
+                {'_id': `${this.namespace}.${_id}`},
+                state.stateObject
             ));
             
             /* set init state value if it is exist */
             const val = init[stateName];
             
-            if (val != undefined)
-                await this.setStateAsync(`${objectId}.${stateName}`, val, true);
+            if (val != undefined) {
+                const callback = async val => {await this.setStateAsync(_id, val, true)};
+
+                /* Execute state setter function */
+                state.setter(_id, callback, {[stateName]: [undefined, val]}, global.stateSetterTimeouts);
+            }
 
             /* Collect states names */
             specStatesNames.push(stateName);
