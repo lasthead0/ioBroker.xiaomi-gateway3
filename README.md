@@ -250,6 +250,9 @@ _**Attantion:** You should to keep in mind this is not really statistic of zigbe
     Placeholder for the next version (at the beginning of the line):
     ### **WORK IN PROGRESS**
 -->
+### 0.3.3 (2022-01-30)
+* Fix lumi temperature and voltage
+
 ### 0.3.2 (2022-01-30)
 * Bug fixes and code improvements
 * Add curtain and buttons support

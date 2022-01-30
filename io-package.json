@@ -1,7 +1,7 @@
 {
   "common": {
     "name": "xiaomi-gateway3",
-    "version": "0.3.2",
+    "version": "0.3.3",
     "title": "xiaomi-gateway3",
     "titleLang": {
       "en": "Xiaomi Gateway 3",
@@ -82,6 +82,18 @@
       }
     ],
     "news": {
+      "0.3.3": {
+        "en": "Fix lumi temperature and voltage",
+        "de": "Fix Lumi Temperatur und Spannung",
+        "ru": "Исправить температуру и напряжение lumi",
+        "pt": "Corrigir a temperatura e a tensão do lumi",
+        "nl": "Fix lumi temperatuur en voltage",
+        "fr": "Correction de la température et de la tension lumineuses",
+        "it": "Correggere la temperatura e la tensione lumi",
+        "es": "Fijar la temperatura y el voltaje de la luz.",
+        "pl": "Napraw temperaturę i napięcie lumi",
+        "zh-cn": "修复 lumi 温度和电压"
+      },
       "0.3.2": {
         "en": "Bug fixes and code improvements\nAdd curtain and buttons support\nUpdate README",
         "de": "Fehlerbehebungen und Codeverbesserungen\nUnterstützung für Vorhänge und Knöpfe hinzufügen\nREADME aktualisieren",
