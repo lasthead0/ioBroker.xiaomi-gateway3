@@ -199,7 +199,7 @@ class XiaomiGateway3 extends utils.Adapter {
                 if (callback) this.sendTo(from, command, 'ERROR: Failed getting devices', callback);
             }
         } else {
-            this.logger.error('ERROR: Xiaomi Cloud login fail!');
+            // this.logger.error('ERROR: Xiaomi Cloud login fail!');
             if (callback) this.sendTo(from, command, 'ERROR: Xiaomi Cloud login fail!', callback);
         }
     }
