@@ -12,6 +12,8 @@
     <script type="text/javascript" src="../../lib/js/materialize.js"></script>
     <script type="text/javascript" src="../../js/adapter-settings.js"></script>
 
+    <!--  -->
+    <script type="text/javascript" src="shuffle.min.js"></script>
     <!-- Load our own files -->
     <script type="text/javascript" src="tab_m.js"></script>
     <link rel="stylesheet" type="text/css" href="index_m.css" />
@@ -24,6 +26,8 @@
         body > div:nth-child(2) {
             display: none !important;
         }
+
+        /*  */
         #table-stats tr > td:nth-child(2) {
             width: 250px !important;
         }
@@ -48,6 +52,219 @@
         #table-stats tr > td:nth-child(9) {
             width: 300px !important;
         }
+
+        /*  */
+        .m .device {
+            height: auto;
+            min-height: 200px;
+            padding: 5px;
+            width: 330px;
+            -webkit-perspective: 800px;
+            -moz-perspective: 800px;
+            -o-perspective: 800px;
+            perspective: 800px;
+        }
+        .m .device .card {
+            display: flex;
+            flex-direction: column;
+            height: 100%;
+            margin: 0px;
+            min-height: 200px;
+            position: relative;
+            width: 100%;
+            -webkit-transition: -webkit-transform 0.5s;
+            -moz-transition: -moz-transform 0.5s;
+            -o-transition: -o-transform 0.5s;
+            transition: transform 0.5s;
+            -webkit-transform-style: preserve-3d;
+            -moz-transform-style: preserve-3d;
+            -o-transform-style: preserve-3d;
+            transform-style: preserve-3d;
+            -webkit-transform-origin: 50% 50%;
+            transform-origin: 50% 50%;
+        }
+        .m .device .card div {
+            -webkit-backface-visibility: hidden;
+            -moz-backface-visibility: hidden;
+            -o-backface-visibility: hidden;
+            backface-visibility: hidden;
+        }
+
+        /* */
+        .m .device .card.dcard .card-content {
+            /* height: 100%; */
+            flex-grow: 1;
+            padding: 10px;
+        }
+        .m .device .card.dcard .card-header {
+            display: flex;
+            margin-bottom: 5px !important;
+        }
+        .m .device .card.dcard .card-header .info {
+            display: flex;
+            line-height: 34px;
+            margin-left: auto;
+        }
+        .m .device .card.dcard .card-header .info .el:last-child {
+            padding-right: 0;
+        }
+        .m .device .card.dcard .card-header .info .el {
+            padding: 0 5px 0 0;
+        }
+        .m .device .card.dcard .card-header .el i {
+            line-height: 24px;
+            /* font-size: 22px; */
+        }
+        .m .device .card.dcard .card-header .el div {
+            font-size: 9.8px;
+            line-height: 10px;
+        }
+        .m .device .card.dcard .card-title {
+            font-size: 16px;
+            font-weight: 300;
+            line-height: 32px;
+            margin-bottom: 0px;
+        }
+
+        /* */
+        .m .device .card.dcard .card-action {
+            display: flex;
+            padding: 5px 10px;
+        }
+
+        /* card-reveal */
+        .m .device .card.dcard .card-reveal {
+            padding: 10px;
+        }
+
+        .m .device .card.dcard .card-reveal > div {
+            display: flex !important;
+            flex-direction: column;
+            height: 100%;
+        }
+        .m .device .card.dcard .card-reveal > div > div:nth-child(2) {
+            display: flex;
+            flex-grow: 1;
+        }
+        .m .device .card.dcard .card-reveal .card-footer {
+            border-top: 1px solid rgba(160,160,160,.2);
+            display: flex;
+            line-height: 32px;
+            padding: 5px 10px;
+            margin: 0 -10px -10px -10px;
+        }
+        .m .device .card.dcard .card-reveal .dropdown-content {
+            min-width: 120px;
+        }
+        .m .device .card.dcard .card-reveal .dropdown-content li {
+            min-height: 0;
+        }
+        .m .device .card.dcard .card-reveal .dropdown-content li > a {
+            font-weight: 500;
+            padding: 10px 12px;
+        }
+        .m .device .card.dcard .card-reveal .dropdown-content li > a > i {
+            margin-right: 10px;
+        }
+
+        /* */
+        .m .device .card.dcard ul > li > div.state,
+        .m .device .card.dcard ul > li > div.detail {
+            display: flex;
+        }
+        .m .device .card.dcard ul > li > div.state > div,
+        .m .device .card.dcard ul > li > div.detail > div  {
+            font-size: 12px;
+            height: 14px;
+            line-height: 14px;
+        }
+        .m .device .card.dcard ul > li > div.state > div:first-child,
+        .m .device .card.dcard ul > li > div.detail > div:first-child {
+            flex-grow: 1;
+            font-weight: bold;
+        }
+        .m .device .card.dcard ul > li > div.state > div:last-child,
+        .m .device .card.dcard ul > li > div.detail > div:last-child {
+            display: flex;
+            justify-content: flex-end;            
+        }
+        .m .device .card.dcard ul > li > div.state > div:last-child {
+            width: 95px;
+        }
+        .m .device .card.dcard ul > li > div.detail > div:last-child {
+            width: 155px;
+        }
+        .m .device .card.dcard ul > li > div.state > div.switch {
+            padding-top: 2px;
+        }
+
+        /* */
+        /* .m .device .card.dcard div.control,
+        .m .device .card.dcard div.value {
+            display: flex;
+            justify-content: flex-end;
+        } */
+
+        /* */
+        .m .device .card.dcard div.control.switch span {
+            height: 12px;
+            margin: 0 5px;
+            width: 24px;
+        }
+        .m .device .card.dcard div.control.switch span::before,
+        .m .device .card.dcard div.control.switch span::after {
+            height: 12px;
+            top: 0px;
+            width: 12px;
+        }
+        .m .switch label input[type=checkbox]:checked+.lever:before, 
+        .m .switch label input[type=checkbox]:checked+.lever:after {
+            left: 12px !important;
+        }
+
+        /* */
+        .m .device .card.dcard div.control.check {
+            padding-right: 2px;
+        }
+        .m .device .card.dcard div.control.check span {
+            cursor: default;
+            height: 14px;
+            line-height: 14px;
+            padding-left: 12px;
+        }
+        .m .device .card.dcard div.control.check span::before {
+            height: 11px;
+            top: -2px;
+            width: 8px;
+            left: -1px;
+        }
+        .m .device .card.dcard div.control.check span::after {
+            height: 14px;
+            width: 14px;
+        }
+        .m .device .card.dcard div.control.select {
+            font-size: 10px;
+        }
+        .m .device .card.dcard div.control.range input[type="range"] {
+            margin: 5px 0 5px;
+        }
+
+        /* MODAL EDIT */
+        .m #modal_rename.modal {
+            width: 450px;
+        }
+        .m #modal_rename.modal .modal-content {
+            width: 100% !important;
+            height: 100% !important;
+            padding-bottom: 0;
+        }
+        .m #modal_rename.modal .modal-content .row {
+            margin-bottom: 0;
+        }
+        .m #modal_rename.modal .modal-footer {
+            padding: 4px 20px;
+            width: 100% !important;
+        }
     </style>
     <!-- <script type="text/javascript"></script> -->
 </head>
@@ -58,19 +275,34 @@
             <nav class="nav-extended">
                 <div class="nav-content">
                     <ul class="tabs tabs-transparent">
+                        <li class="tab col s2"><a href="#tab-devices" id="tab_devices" class="translate tooltipped">devices</a></li>
                         <li class="tab col s2"><a href="#tab-stat" id="tab_stat" class="translate tooltipped">statistic</a></li>
                     </ul>
                 </div>
             </nav>
         </div>
         <div id="tabs" class="tabs-content row">
-            <div id="tab-stat" class="col s12 page active">
+            <div id="tab-devices" class="col s12 page active">
+                <div class="navbar-fixed">
+                    <nav style="margin-left: -12px; height: 48px; line-height: 48px;">
+                        <div class="nav-wrapper">
+                        <ul class="right hide-on-med-and-down">
+                            <!-- <li>
+                                <a id="start-pair" class="waves-effect waves-light btn"><i class="material-icons right">swap_vert</i>pair</a>
+                            </li> -->
+                        </ul>
+                        </div>
+                    </nav>
+                </div>
+                <div id="devices" class="row"></div>
+            </div>
+            <div id="tab-stat" class="col s12 page">
                 <div class="row">
                     <div class="col">
-                        <a id="reload-stat" class="waves-effect waves-light btn"><i class="material-icons right">refresh</i>reload</a>
+                        <a id="reload-stat" class="waves-effect waves-light btn translate"><i class="material-icons right">refresh</i>reload</a>
                     </div>
                     <div class="col">
-                        <a id="clear-stat" class="waves-effect waves-light btn"><i class="material-icons right">delete_forever</i>clear</a>
+                        <a id="clear-stat" class="waves-effect waves-light btn translate"><i class="material-icons right">delete_forever</i>clear</a>
                     </div>
                     <div class="col">
                         <div id="loader1" class="loader hidden"> </div>
@@ -112,6 +344,20 @@
                         </div>
                     </div>
                 </div>
+            </div>
+        </div>
+        <!-- Modal edit -->
+        <div id="modal_rename" class="modal">
+            <div class="modal-content">
+                <div class="row">
+                    <div class="input-field col s12">
+                        <input id="friendly_name_input" type="text" class="validate" value="">
+                        <label class="active translate" for="friendly_name_input">Friendly Name</label>
+                    </div>
+                </div>
+            </div>
+            <div class="modal-footer">
+                <a id="apply_rename" href="#!" class="modal-close apply-rename waves-effect waves-green btn-flat translate">Apply</a>
             </div>
         </div>
     </div>

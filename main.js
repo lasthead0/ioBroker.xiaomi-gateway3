@@ -2,6 +2,7 @@
 
 /* */
 const utils = require('@iobroker/adapter-core');
+const {isArray} = require('./lib/tools');
 /* */
 const crypto = require('crypto');
 const mqtt = require('mqtt');
@@ -151,6 +152,9 @@ class XiaomiGateway3 extends utils.Adapter {
                 'ClearMessagesStat': this._msgClearMessagesStat.bind(this),
                 'PingGateway3': this._msgPingGateway3.bind(this),
                 'CheckTelnet': this._msgCheckTelnet.bind(this),
+                'GetDevices': this._msgGetDevices.bind(this),
+                'ModifyDeviceObject': this._msgModifyDeviceObject.bind(this),
+                'SetStateValue': this._msgSetStateValue.bind(this),
             };
 
             await handlers[command](from, command, message, callback);
@@ -253,6 +257,90 @@ class XiaomiGateway3 extends utils.Adapter {
 
         if (localip != undefined) avbl = await Gateway3Helper.checkPort(23, localip);
         if (callback) this.sendTo(from, command, avbl, callback);
+    }
+
+    /* 'GetDevices' message handler */
+    async _msgGetDevices(from, command, {dids}, callback) {
+        const _devices = this.gateway3.devices;
+        
+        dids = dids || Object.keys(_devices);
+        let devices1 = dids.map(_did => {
+            const {mac, type, did, model} = _devices[_did];
+
+            return {
+                id: String(mac).substr(2),
+                mac,
+                type,
+                did,
+                model
+            };
+        });
+
+        for (let device of devices1) {
+            const {id} = device;
+
+            const deviceObject = await this.getObjectAsync(id);
+            
+            if (deviceObject != undefined)
+                device.name = deviceObject.common.name;
+
+            const states = await this.getStatesAsync(`${id}*`);
+            const filterStates = filter => Object.keys(states)
+                .map(s => s.split('.').splice(-1)[0])
+                .filter(s => !filter.includes(s));
+
+            /*  */
+            const filter1 = ['debug_output', 'messages_stat'];
+            const stateVal = filterStates(filter1)
+                .reduce((obj, sn) => {
+                    return Object.assign({}, obj, {[sn]: (states[`${this.namespace}.${id}.${sn}`] || {})['val']});
+                }, {});
+
+            device.stateVal = stateVal;
+
+            /*  */
+            const stateCommon = {};
+            const filter2 = ['debug_output', 'messages_stat', 'available', 'link_quality', 'battery'];
+            for (let sn of filterStates(filter2)) {
+                const {common} = await this.getObjectAsync(`${id}.${sn}`);
+                
+                if (common != undefined) {
+                    const {name, role, type, write, min, max, unit, states} = common;
+                    
+                    /* Select only useful fields of common */
+                    stateCommon[sn] = {name, role, type, write, min, max, unit, states};
+                }
+            }
+
+            device.stateCommon = stateCommon;
+        }
+        
+        if (callback)
+            this.sendTo(from, command, devices1, callback);
+    }
+
+    /* 'ModifyDeviceObject' message handler */
+    async _msgModifyDeviceObject(from, command, message, callback) {
+        const {id, object: common} = message;
+        const _object = await this.getForeignObjectAsync(id);
+        
+        if (_object != undefined && common != undefined) {
+            await this.setForeignObjectAsync(id, Object.assign(
+                _object,
+                {
+                    from: `system.adapter.${this.namespace}`,
+                    ts: Date.now()
+                },
+                {common: Object.assign(_object.common, common)}
+            ));
+        }
+    }
+
+    /* 'SetStateValue' message handler */
+    async _msgSetStateValue(from, command, message, callback) {
+        const {id, value} = message;
+
+        await this.setStateAsync(id, value, false);
     }
     
     /* MQTT on 'connect' event callback */
