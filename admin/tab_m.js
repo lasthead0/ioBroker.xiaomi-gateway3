@@ -123,13 +123,13 @@ async function load(settings, onChange) {
     $(`a.open-rename`).click(function (event) {
         const $trigger = $(event.target);
         const id = $trigger.data('oid');
-        const name = $trigger.parents('div.device').data('name');
+        const friendlyName = $trigger.parents('div.device').data('friendly-name');
 
         const instance = M.Modal.getInstance($('#modal_rename'));
         const $modal = $(instance.el);
 
         $modal.data('oid', id);
-        $modal.find('#friendly_name_input').val(name);
+        $modal.find('#friendly_name_input').val(friendlyName);
         
         if (M) M.updateTextFields();
         
@@ -167,7 +167,7 @@ async function getDevices(ids/* Array */) {
 
 function showDevices() {   
     const html = Object.values(devices).map(device => {
-        const {id, mac, type, did, model, name, stateVal, stateCommon} = device;
+        const {id, mac, type, did, model, name, fwVer, friendlyName, stateVal, stateCommon} = device;
 
         if (type == 'gateway') return '';
 
@@ -238,7 +238,9 @@ function showDevices() {
         const ulContentDetails = [
             ['did', did],
             ['mac', mac],
-            ['model', model]
+            ['model', model],
+            ['name', name],
+            ['fwVer', fwVer]
         ]
             .map(([name, value]) => `
                 <li style="margin-bottom: 2px;">
@@ -255,11 +257,11 @@ function showDevices() {
             .join('');
 
         const textRename = translateWord('Rename');
-        const card = `<div id="${id}" class="device" data-name="${name}">
+        const card = `<div id="${id}" class="device" data-friendly-name="${friendlyName}">
             <div class="card dcard">
                 <div class="card-content">
                     <div class="card-header">
-                        <div id="friendly_name" class="card-title truncate" style="margin-right: 5px;">${name}</div>
+                        <div id="friendly_name" class="card-title truncate" style="margin-right: 5px;">${friendlyName}</div>
                         <div class="info">
                             ${stateVal.battery != undefined ? `
                                 <div id="${id}_battery" class="col el" style="padding-right: 0;">
@@ -293,7 +295,7 @@ function showDevices() {
                 <div class="card-reveal">
                     <div>
                         <div class="card-title card-header">
-                            <div id="friendly_name" class="card-title truncate" style="margin-right: 5px;">${name}</div>
+                            <div id="friendly_name" class="card-title truncate" style="margin-right: 5px;">${friendlyName}</div>
                             <div style="margin-left: auto;">
                                 <i class="material-icons right">close</i>
                             </div>
@@ -421,12 +423,12 @@ socket.on('objectChange', async function (id, object) {
 
 /*  */
 function renameDevice(id) {
-    const {name} = devices[id];
+    const {friendlyName} = devices[id];
 
     const $device = $(`#${id}.device`);
 
-    $device.find('div#friendly_name').text(name);
-    $device.data('name', name);
+    $device.find('div#friendly_name').text(friendlyName);
+    $device.data('friendly-name', friendlyName);
 }
 
 function updateAvailable(id, val) {

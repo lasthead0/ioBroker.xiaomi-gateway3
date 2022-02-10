@@ -265,14 +265,16 @@ class XiaomiGateway3 extends utils.Adapter {
         
         dids = dids || Object.keys(_devices);
         let devices1 = dids.map(_did => {
-            const {mac, type, did, model} = _devices[_did];
+            const {mac, type, did, model, name, fwVer} = _devices[_did];
 
             return {
                 id: String(mac).substr(2),
                 mac,
                 type,
                 did,
-                model
+                model,
+                name,
+                fwVer
             };
         });
 
@@ -282,7 +284,7 @@ class XiaomiGateway3 extends utils.Adapter {
             const deviceObject = await this.getObjectAsync(id);
             
             if (deviceObject != undefined)
-                device.name = deviceObject.common.name;
+                device.friendlyName = deviceObject.common.name;
 
             const states = await this.getStatesAsync(`${id}*`);
             const filterStates = filter => Object.keys(states)
