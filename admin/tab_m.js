@@ -156,7 +156,19 @@ async function getDevices(ids/* Array */) {
     await new Promise(resolve => {
         sendTo(namespace, 'GetDevices', {ids}, function (msg) {
             if (isArray(msg)) {
-                const _devices = msg.reduce((acc, d) => Object.assign(acc, {[d.id]: d}), {});
+                const _devices = msg
+                    .sort((a, b) => {
+                        if (a.type == 'gateway') {
+                            return -1;
+                        } else if (b.type == 'gateway') {
+                            return 1;
+                        } else {
+                            const aInt = a.mac.match(/[\da-f]{2}/g).reduce((acc, c) => acc + parseInt(c, 16), 0);
+                            const bInt = b.mac.match(/[\da-f]{2}/g).reduce((acc, c) => acc + parseInt(c, 16), 0);
+                            return bInt - aInt;
+                        }
+                    })
+                    .reduce((acc, d) => Object.assign(acc, {[d.id]: d}), {});
 
                 devices = Object.assign(devices, _devices);
             }
@@ -169,7 +181,7 @@ function showDevices() {
     const html = Object.values(devices).map(device => {
         const {id, mac, type, did, model, name, fwVer, friendlyName, stateVal, stateCommon} = device;
 
-        if (type == 'gateway') return '';
+        // if (type == 'gateway') return '';
 
         let img_src = '';
         

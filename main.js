@@ -351,31 +351,32 @@ class XiaomiGateway3 extends utils.Adapter {
     }
 
     /* MQTT on 'message' event callback */
-    async _onMqttMessage(topic, msg) {
-        if (String(msg).match(/^\{.+\}$/gm) != undefined) {
-            try {
-                const msgObject = JSON.parse(msg);
+    async _onMqttMessage(topic, message) {
+        const RE_OBJECT = /^\{.+\}$/gm;
 
-                /* */
-                if (topic.match(/^zigbee\/send$/gm)) {
-                    this.logger.debug(`(_LUMI_) ${topic} ${msg}`);
-                    this.gateway3.processMessageLumi(msgObject, this._cbProcessMessage.bind(this));
-                }  else if (topic.match(/^log\/ble$/gm)) {
-                    this.logger.debug(`(_BLE_) ${topic} ${msg}`);
-                    this.gateway3.processMessageBle(msgObject, this._cbProcessMessage.bind(this));
-                }  else if (topic.match(/^log\/miio$/gm)) {
-                    // TODO: or not TODO:
-                } else if (topic.match(/\/heartbeat$/gm)) {
-                    //TODO: or not TODO:
-                    // Gateway heartbeats (don't handle for now)
-                } else if (topic.match(/\/(MessageReceived|devicestatechange)$/gm)) {
-                    this.gateway3.processMessageReceived(msgObject, this._cbProcessMessage.bind(this));
-                } else if (topic.match(/^zigbee\/recv$/gm)) {
-                    this.logger.debug(`(_LUMI_) ${topic} ${msg}`);
-                }
-            } catch (e) {
-                this.logger.error(e.stack);
+        try {
+            if (String(message).match(RE_OBJECT) != undefined)
+                var messageJSON = JSON.parse(message);
+            /* */
+            if (topic.match(/^zigbee\/send$/gm)) {
+                this.logger.debug(`(_LUMI_) ${topic} ${message}`);
+                this.gateway3.processMessageLumi(messageJSON, this._cbProcessMessage.bind(this));
+            }  else if (topic.match(/^log\/ble$/gm)) {
+                this.logger.debug(`(_BLE_) ${topic} ${message}`);
+                this.gateway3.processMessageBle(messageJSON, this._cbProcessMessage.bind(this));
+            }  else if (topic.match(/^log\/miio$/gm)) {
+                // this.logger.debug(`${topic} ${message}`); //TODO:
+                this.gateway3.processMessageLogMiio(message, this._cbProcessMessage.bind(this));
+            } else if (topic.match(/\/heartbeat$/gm)) {
+                //TODO: or not TODO:
+                // Gateway heartbeats (don't handle for now)
+            } else if (topic.match(/\/(MessageReceived|devicestatechange)$/gm)) {
+                this.gateway3.processMessageReceived(messageJSON, this._cbProcessMessage.bind(this));
+            } else if (topic.match(/^zigbee\/recv$/gm)) {
+                this.logger.debug(`(_LUMI_) ${topic} ${message}`);
             }
+        } catch (e) {
+            this.logger.error(e.stack);
         }
     }
 
@@ -384,7 +385,7 @@ class XiaomiGateway3 extends utils.Adapter {
         const id = String(mac).substr(2);
         const states = await this.getStatesAsync(`${id}*`);
 
-        /* Construct key-value object  from current states */
+        /* Construct key-value object from current states */
         const deviceStateVal = Object.keys(states)
             .reduce((obj, s) => {
                 const [sn,] = s.split('.').splice(-1);
