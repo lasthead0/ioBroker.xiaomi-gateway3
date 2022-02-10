@@ -1,7 +1,7 @@
 {
   "common": {
     "name": "xiaomi-gateway3",
-    "version": "0.3.3",
+    "version": "0.3.4",
     "title": "xiaomi-gateway3",
     "titleLang": {
       "en": "Xiaomi Gateway 3",
@@ -82,6 +82,18 @@
       }
     ],
     "news": {
+      "0.3.4": {
+        "en": "Fix issue getting devices from cloud and switch to RC4\nAdd devices page\nOther fixes and improvements",
+        "de": "Beheben Sie das Problem beim Abrufen von Geräten aus der Cloud und wechseln Sie zu RC4\nSeite Geräte hinzufügen\nWeitere Korrekturen und Verbesserungen",
+        "ru": "Устранить проблему с получением устройств из облака и переключиться на RC4\nСтраница добавления устройств\nДругие исправления и улучшения",
+        "pt": "Corrigir o problema de obter dispositivos da nuvem e mudar para RC4\nAdicionar página de dispositivos\nOutras correções e melhorias",
+        "nl": "Probleem oplossen om apparaten uit de cloud te halen en over te schakelen naar RC4\nPagina apparaten toevoegen\nAndere oplossingen en verbeteringen",
+        "fr": "Correction du problème d'obtention d'appareils depuis le cloud et passage à RC4\nPage Ajouter des appareils\nAutres correctifs et améliorations",
+        "it": "Risolvi il problema con il recupero dei dispositivi dal cloud e passa a RC4\nAggiungi la pagina dei dispositivi\nAltre correzioni e miglioramenti",
+        "es": "Solucionar el problema al obtener dispositivos de la nube y cambiar a RC4\nAgregar página de dispositivos\nOtras correcciones y mejoras",
+        "pl": "Napraw problem z pobieraniem urządzeń z chmury i przełączeniem na RC4\nStrona dodawania urządzeń\nInne poprawki i ulepszenia",
+        "zh-cn": "修复从云端获取设备并切换到 RC4 的问题\n添加设备页面\n其他修复和改进"
+      },
       "0.3.3": {
         "en": "Fix lumi temperature and voltage",
         "de": "Fix Lumi Temperatur und Spannung",
@@ -153,18 +165,6 @@
         "es": "Soporte agregado para dispositivos BLE (pruebas necesarias)\nMejoras para la compatibilidad con zigbee y BLE\nSalida agregada para fines de depuración\nMuchas mejoras de código",
         "pl": "Dodano wsparcie dla urządzeń BLE (wymagane testy)\nUlepszenia obsługi zigbee i BLE\nDodano dane wyjściowe do celów debugowania\nWiele ulepszeń kodu",
         "zh-cn": "添加了对 BLE 设备的支持（需要测试）\nzigbee 和 BLE 支持的改进\n添加了用于调试目的的输出\n大量代码改进"
-      },
-      "0.0.1-alpha.0": {
-        "en": "Initial release",
-        "de": "Erstveröffentlichung",
-        "ru": "Первый выпуск",
-        "pt": "lançamento inicial",
-        "nl": "Eerste uitgave",
-        "fr": "Première version",
-        "it": "Versione iniziale",
-        "es": "Versión inicial",
-        "pl": "Pierwsze wydanie",
-        "zh-cn": "初始发行"
       }
     }
   },
