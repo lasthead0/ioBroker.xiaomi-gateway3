@@ -2,7 +2,7 @@
 
 /* */
 const utils = require('@iobroker/adapter-core');
-const {isArray} = require('./lib/tools');
+const {isArray, isObject} = require('./lib/tools');
 /* */
 const crypto = require('crypto');
 const mqtt = require('mqtt');
@@ -408,10 +408,12 @@ class XiaomiGateway3 extends utils.Adapter {
             /* */
             if (topic.match(/^zigbee\/send$/gm)) {
                 this.logger.debug(`(_LUMI_) ${topic} ${message}`);
-                this.gateway3.processMessageLumi(messageJSON, this._cbProcessMessage.bind(this));
+                if (messageJSON != undefined && isObject(messageJSON))
+                    this.gateway3.processMessageLumi(messageJSON, this._cbProcessMessage.bind(this));
             }  else if (topic.match(/^log\/ble$/gm)) {
                 this.logger.debug(`(_BLE_) ${topic} ${message}`);
-                this.gateway3.processMessageBle(messageJSON, this._cbProcessMessage.bind(this));
+                if (messageJSON != undefined && isObject(messageJSON))
+                    this.gateway3.processMessageBle(messageJSON, this._cbProcessMessage.bind(this));
             }  else if (topic.match(/^log\/miio$/gm)) {
                 // this.logger.debug(`${topic} ${message}`); //TODO:
                 this.gateway3.processMessageLogMiio(message, this._cbProcessMessage.bind(this));
@@ -419,7 +421,8 @@ class XiaomiGateway3 extends utils.Adapter {
                 //TODO: or not TODO:
                 // Gateway heartbeats (don't handle for now)
             } else if (topic.match(/\/(MessageReceived|devicestatechange)$/gm)) {
-                this.gateway3.processMessageReceived(messageJSON, this._cbProcessMessage.bind(this));
+                if (messageJSON != undefined && isObject(messageJSON))
+                    this.gateway3.processMessageReceived(messageJSON, this._cbProcessMessage.bind(this));
             } else if (topic.match(/^zigbee\/recv$/gm)) {
                 this.logger.debug(`(_LUMI_) ${topic} ${message}`);
             }
