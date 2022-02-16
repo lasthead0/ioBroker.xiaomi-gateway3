@@ -179,6 +179,7 @@
     "dLogMQTTLumi": false,
     "dLogMQTTBle": false,
     "dLogAllTheRest": false,
+    "cutSpam": false,
     "debugOutput": false,
     "msgReceivedStat": false,
     "gwEnableTelnet": true,

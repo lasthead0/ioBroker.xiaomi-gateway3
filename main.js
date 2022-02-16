@@ -6,17 +6,22 @@ const {isArray} = require('./lib/tools');
 /* */
 const crypto = require('crypto');
 const mqtt = require('mqtt');
+const format = require('date-fns/format');
+/* */
+const {fetchHashOfString} = require('./lib/utils');
 /* */
 const {MiioHelper, Gateway3Helper} = require('./lib/helpers');
 const XiaomiCloud = require('./lib/xiaomiCloud');
 const Gateway3 = require('./lib/gateway3');
 
 global.sleepTimeouts = {};
+global.bufferTimeouts = {};
 global.stateSetterTimeouts = {};
 
 class XiaomiGateway3 extends utils.Adapter {
     #mqttc = undefined;
     /* {error, debug} */
+    #logBuffer = {};
     #_LOGGER = {
         'info': undefined,
         'error': undefined,
@@ -44,12 +49,50 @@ class XiaomiGateway3 extends utils.Adapter {
 	    this.subscribeStates('*');
 
         /* Adapter logging options */
-        const {debugLog, dLogAllTheRest, dLogMQTTLumi, dLogMQTTBle} = this.config;
+        const {cutSpam, debugLog, dLogAllTheRest, dLogMQTTLumi, dLogMQTTBle} = this.config;
 
         /* Adapter logger */
         this.logger = {
             'info': this.log.info,
-            'error': this.log.error,
+            'error': (cutSpam => {
+                if (cutSpam == false) {
+                    return msg => this.log.error(msg);
+                } else {
+                    return msg => {
+                        if (msg instanceof Error)
+                            var hash = fetchHashOfString(msg.message);
+                        else if (typeof msg == 'string')
+                            var hash = fetchHashOfString(msg);
+                        else
+                            return;
+
+                        if (this.#logBuffer[hash] != undefined) {
+                            const {count} = this.#logBuffer[hash];
+                            
+                            this.#logBuffer[hash].count = count + 1;
+                        } else {
+                            this.log.error(msg);
+                            
+                            if (msg instanceof Error)
+                                msg = msg.message;
+
+                            this.#logBuffer[hash] = {message: msg, count: 0, first: Date.now()};
+
+                            global.bufferTimeouts[hash] = setTimeout(() => {
+                                const {message, count, first} = this.#logBuffer[hash];
+                                
+                                if (count > 0) {
+                                    this.log.error(`^^^ ${count} identical errors occurred in the last 60 minutes. The first was at ${format(first, 'dd.MM.yyyy\'T\'HH:mm:ss.SSSxxx')}`);
+                                    this.log.error(message);
+                                }
+
+                                this.#logBuffer[hash] = undefined;
+                                delete this.#logBuffer[hash];
+                            }, 3600000);
+                        }
+                    };
+                }
+            })(cutSpam),
             'debug': ((dLog, dLogAllTheRest, ...log) => {
                 if (dLog) {
                     const [LUMI, BLE,] = log;
@@ -167,7 +210,12 @@ class XiaomiGateway3 extends utils.Adapter {
             this.setState('info.connection', false, true);
 
             /* clear timeouts */
-            for (let t of [].concat(Object.values(global.stateSetterTimeouts), Object.values(global.sleepTimeouts)))
+            const timeouts = [].concat(
+                Object.values(global.stateSetterTimeouts),
+                Object.values(global.sleepTimeouts),
+                Object.values(global.bufferTimeouts)
+            );
+            for (let t of timeouts)
                 clearTimeout(t);
 
             /* close mqtt client */
