@@ -334,14 +334,10 @@ class XiaomiGateway3 extends utils.Adapter {
             if (deviceObject != undefined)
                 device.friendlyName = deviceObject.common.name;
 
-            const states = await this.getStatesAsync(`${id}*`);
-            const filterStates = filter => Object.keys(states)
-                .map(s => s.split('.').splice(-1)[0])
-                .filter(s => !filter.includes(s));
-
             /*  */
-            const filter1 = ['debug_output', 'messages_stat'];
-            const stateVal = filterStates(filter1)
+            const states = await this.getStatesAsync(`${id}*`);
+            const stateVal = Object.keys(states)
+                .map(s => s.split('.').splice(-1)[0])
                 .reduce((obj, sn) => {
                     return Object.assign({}, obj, {[sn]: (states[`${this.namespace}.${id}.${sn}`] || {})['val']});
                 }, {});
@@ -349,10 +345,22 @@ class XiaomiGateway3 extends utils.Adapter {
             device.stateVal = stateVal;
 
             /*  */
+            const stateObject = await this.getObjectListAsync({
+                startkey: `${this.namespace}.${id}.`,
+                endkey: `${this.namespace}.${id}.\u9999`
+            }).then(
+                val => val.rows
+                    .map(row => row.value)
+                    .filter(el => el.common.custom == undefined
+                        || el.common.custom[this.namespace] == undefined
+                        || el.common.custom[this.namespace].showInCard == true
+                    )
+            );
+
             const stateCommon = {};
-            const filter2 = ['debug_output', 'messages_stat', 'available', 'link_quality', 'battery'];
-            for (let sn of filterStates(filter2)) {
-                const {common} = await this.getObjectAsync(`${id}.${sn}`);
+            for (const object of stateObject) {
+                const sn = object['_id'].split('.').splice(-1)[0];
+                const {common} = object;
                 
                 if (common != undefined) {
                     const {name, role, type, write, min, max, unit, states} = common;
@@ -518,10 +526,16 @@ class XiaomiGateway3 extends utils.Adapter {
             const stateName = state.stateName;
             const _id = `${objectId}.${stateName}`;
 
+            let stateObject = state.stateObject;
+            const {custom} = stateObject.common;
+
+            if (custom != undefined)
+                stateObject.common.custom = {[this.namespace]: custom};
+
             /* create state object if it is not exist */
             await this.setObjectNotExistsAsync(_id, Object.assign({},
                 {'_id': `${this.namespace}.${_id}`},
-                state.stateObject
+                stateObject
             ));
             
             /* set init state value if it is exist */
