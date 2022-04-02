@@ -148,6 +148,41 @@ async function load(settings, onChange) {
         sendTo(namespace, 'ModifyDeviceObject', {id, object: {name}}, function (data) {});
     });
 
+    /* Open modal for device friendly name editing */
+    $(`a.open-yaml`).click(function (event) {
+        const $trigger = $(event.target);
+        
+        const instance = M.Modal.getInstance($('#modal_yaml'));
+        const $modal = $(instance.el);
+
+        const id = $trigger.data('oid');
+        const file = id.split('.').pop() + '.yaml';
+       
+        sendTo(namespace, 'ReadFromFile', {file}, function (data) {
+            if (data == undefined || data == 'ReadFromFile')
+                $modal.find('#yaml_input').val('');
+            else
+                $modal.find('#yaml_input').val(data);
+
+            if (M) M.updateTextFields();
+        });
+
+        $modal.data('oid', id);
+
+        instance.open();
+    });
+
+    $(`a.apply-yaml`).click(function (event) {
+        const $el = $(event.target);
+        const $modal = $el.parents('#modal_yaml');
+
+        const id = $modal.data('oid');
+        const file = id.split('.').pop() + '.yaml';
+        const data = $modal.find('#yaml_input').val();
+        
+        sendTo(namespace, 'WriteToFile', {file, data}, function (data) {});
+    });
+
     /*  */
     onChange(false);
 }
@@ -327,7 +362,8 @@ function showDevices() {
                             </div>
                             <!-- Dropdown Structure -->
                             <ul id="dropdown_${id}" class="dropdown-content">
-                                <li><a href="#!" class="green-text text-darken-3 open-rename" data-oid="${namespace}.${id}"><i class="material-icons">edit</i>${textRename}</a></li>
+                                <li><a href="#!" class="green-text text-darken-3 open-rename" data-oid="${namespace}.${id}"><i class="material-icons">edit</i>${translateWord('Rename')}</a></li>
+                                <li><a href="#!" class="blue-text text-darken-3 open-yaml" data-oid="${namespace}.${id}"><i class="material-icons">subject</i>${translateWord('Config')}</a></li>
                                 <!-- <li class="divider" tabindex="-1"></li> -->
                                 <!-- <li><a id="a_delete_${id}" href="#!" class="red-text text-darken-3"><i class="material-icons">delete</i>delete</a></li> -->
                             </ul>
@@ -389,6 +425,9 @@ socket.on('stateChange', function (id, state) {
         devices[_id].stateVal[_state] = value;
 
         if (['available', 'link_quality', 'battery'].includes(_state) == false) {
+            if (!Object.keys(devices[_id].stateCommon).includes(_state))
+                return;
+
             const {role, type, write, states, unit} = devices[_id].stateCommon[_state];
             const $el = $(`#${_id}_${_state}`);
 

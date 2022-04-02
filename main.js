@@ -4,9 +4,13 @@
 const utils = require('@iobroker/adapter-core');
 const {isArray, isObject} = require('./lib/tools');
 /* */
+const fs = require('fs');
+const path = require('path');
 const crypto = require('crypto');
 const mqtt = require('mqtt');
 const format = require('date-fns/format');
+/* */
+const yaml = require('js-yaml');
 /* */
 const {fetchHashOfString} = require('./lib/utils');
 /* */
@@ -164,7 +168,18 @@ class XiaomiGateway3 extends utils.Adapter {
             this.#mqttc.on('message', this._onMqttMessage.bind(this));
         }
 
-        /* set adapter connection indicator */
+        /* Create instance data folder `xiaomi-gateway3_%INSTANCE%` */
+        const dbDir = path.join(utils.getAbsoluteInstanceDataDir(this), '').replace('.', '_');
+
+        if (!fs.existsSync(dbDir)) {
+            try {
+                fs.mkdirSync(dbDir, '0755');
+            } catch (e) {
+                this.logger.error(`Cannot create directory ${dbDir}: ${e}`);
+            }
+        }
+
+        /* Set adapter connection indicator */
         const connected = enabledTelnet && enabledMqtt;
 
         await this.setStateAsync('info.connection', connected, true);
@@ -198,6 +213,8 @@ class XiaomiGateway3 extends utils.Adapter {
                 'GetDevices': this._msgGetDevices.bind(this),
                 'ModifyDeviceObject': this._msgModifyDeviceObject.bind(this),
                 'SetStateValue': this._msgSetStateValue.bind(this),
+                'ReadFromFile':  this._msgReadFromFile.bind(this),
+                'WriteToFile': this._msgWriteToFile.bind(this)
             };
 
             await handlers[command](from, command, message, callback);
@@ -353,11 +370,12 @@ class XiaomiGateway3 extends utils.Adapter {
                     .map(row => row.value)
                     .filter(el => el.common.custom == undefined
                         || el.common.custom[this.namespace] == undefined
-                        || el.common.custom[this.namespace].showInCard == true
+                        || el.common.custom[this.namespace].hideFromCard == undefined
+                        || el.common.custom[this.namespace].hideFromCard != true
                     )
             );
 
-            const stateCommon = {};
+            const stateCommon = {};          
             for (const object of stateObject) {
                 const sn = object['_id'].split('.').splice(-1)[0];
                 const {common} = object;
@@ -399,6 +417,37 @@ class XiaomiGateway3 extends utils.Adapter {
         const {id, value} = message;
 
         await this.setStateAsync(id, value, false);
+    }
+    
+    /* 'ReadFromFile' message handler */
+    async _msgReadFromFile(from, command, message, callback) {
+        const {file} = message;
+        const filePath = this._instanceFileName(file);
+
+        let fileData = undefined;
+
+        try {
+            if (fs.existsSync(filePath))
+                fileData = fs.readFileSync(filePath, {encoding: 'utf8'});
+        } catch (e) {
+            this.logger.error(e.message);
+        }
+
+        if (callback)
+            this.sendTo(from, command, fileData, callback);
+    }
+
+    /* 'WriteToFile' message handler */
+    async _msgWriteToFile(from, command, message, callback) {
+        const {file, data} = message;
+        
+        try {
+            const filePath = this._instanceFileName(file);
+                
+            fs.writeFileSync(filePath, data, {encoding: 'utf8'});
+        } catch (e) {
+            this.logger.error(e.message);
+        }
     }
     
     /* MQTT on 'connect' event callback */
@@ -522,6 +571,9 @@ class XiaomiGateway3 extends utils.Adapter {
         const specStatesNames = [];
 
         /* */
+        const deviceConfigFromFile = this._readDeviceConfigFromFile(objectId, false);
+
+        /* */
         for (let state of deviceSpec) {
             const stateName = state.stateName;
             const _id = `${objectId}.${stateName}`;
@@ -529,11 +581,37 @@ class XiaomiGateway3 extends utils.Adapter {
             let stateObject = state.stateObject;
             const {custom} = stateObject.common;
 
-            if (custom != undefined)
-                stateObject.common.custom = {[this.namespace]: custom};
+            stateObject.common.custom = {[this.namespace]: Object.assign({}, custom)};
 
-            /* create state object if it is not exist */
-            await this.setObjectNotExistsAsync(_id, Object.assign({},
+            /* */
+            const _stateObject = await this.getObjectAsync(_id);
+            
+            if (_stateObject != undefined) {
+                const {_custom} = _stateObject.common;
+                const {custom} = stateObject.common;
+
+                stateObject.common.custom = Object.assign({}, _custom, custom);
+            }
+
+            /* */
+            if (deviceConfigFromFile != undefined) {
+                const {cardStates} = deviceConfigFromFile;
+                
+                if (cardStates != undefined) {
+                    const {hide} = cardStates;
+                    const that = stateObject.common.custom[this.namespace];
+
+                    stateObject.common.custom[this.namespace] = Object.assign({}, that);
+
+                    if (isArray(hide)) {
+                        if (hide.includes(stateName))
+                            stateObject.common.custom[this.namespace].hideFromCard = true;
+                    }
+                }
+            }
+
+            /* set state object */
+            await this.setObjectAsync(_id, Object.assign({},
                 {'_id': `${this.namespace}.${_id}`},
                 stateObject
             ));
@@ -569,6 +647,31 @@ class XiaomiGateway3 extends utils.Adapter {
     /* */
     async _cbSendMqttMessage(topic, msg) {
         this.#mqttc.publish(topic, msg);
+    }
+
+    /* */
+    _instanceFileName(fileName) {
+        const instanceDataDir = utils.getAbsoluteInstanceDataDir(this).replace('.', '_');
+        return path.join(instanceDataDir, fileName);
+    }
+
+    /* */
+    _readDeviceConfigFromFile(id, showError) {
+        showError = showError == undefined ? true : showError;
+
+        const deviceConfigFile = this._instanceFileName(id + '.yaml');
+
+        try {
+            const deviceConfigYaml = fs.readFileSync(deviceConfigFile, {encoding: 'utf8'});
+            const deviceConfigJson = yaml.load(deviceConfigYaml);
+
+            return deviceConfigJson;
+        } catch (e) {
+            if (showError || e instanceof yaml.YAMLException)
+                this.logger.error(e.message);
+
+            return undefined;
+        }
     }
 }
 
