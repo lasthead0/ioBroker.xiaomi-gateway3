@@ -38,6 +38,7 @@
       "zigbee"
     ],
     "stopBeforeUpdate": true,
+    "dataFolder": "xiaomi-gateway3_%INSTANCE%",
     "connectionType": "local",
     "dataSource": "push",
     "license": "MIT",
