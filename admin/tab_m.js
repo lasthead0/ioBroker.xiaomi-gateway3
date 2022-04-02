@@ -122,11 +122,12 @@ async function load(settings, onChange) {
     /* Open modal for device friendly name editing */
     $(`a.open-rename`).click(function (event) {
         const $trigger = $(event.target);
-        const id = $trigger.data('oid');
-        const friendlyName = $trigger.parents('div.device').data('friendly-name');
 
         const instance = M.Modal.getInstance($('#modal_rename'));
         const $modal = $(instance.el);
+
+        const id = $trigger.data('oid');
+        const friendlyName = $trigger.parents('div.device').data('friendly-name');
 
         $modal.data('oid', id);
         $modal.find('#friendly_name_input').val(friendlyName);
@@ -268,7 +269,6 @@ function showDevices() {
             )
             .join('');
 
-        const textRename = translateWord('Rename');
         const card = `<div id="${id}" class="device" data-friendly-name="${friendlyName}">
             <div class="card dcard">
                 <div class="card-content">
