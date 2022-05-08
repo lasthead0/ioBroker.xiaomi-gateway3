@@ -1,7 +1,7 @@
 {
   "common": {
     "name": "xiaomi-gateway3",
-    "version": "0.3.4",
+    "version": "0.3.5",
     "title": "xiaomi-gateway3",
     "titleLang": {
       "en": "Xiaomi Gateway 3",
@@ -83,6 +83,18 @@
       }
     ],
     "news": {
+      "0.3.5": {
+        "en": "Added configuration for devices\nAdded cutting SPAM messages at log\nRemove unnecessary `Debug log` option\nFixes and improvements",
+        "de": "Konfiguration für Geräte hinzugefügt\nSchneiden von SPAM-Nachrichten im Protokoll hinzugefügt\nEntfernen Sie die unnötige Option \"Debug-Protokoll\".\nKorrekturen und Verbesserungen",
+        "ru": "Добавлена конфигурация для устройств\nДобавлено вырезание спам-сообщений в логе\nУдалите ненужную опцию «Журнал отладки».\nИсправления и улучшения",
+        "pt": "Configuração adicionada para dispositivos\nAdicionado corte de mensagens de SPAM no log\nRemova a opção \"Debug log\" desnecessária\nCorreções e melhorias",
+        "nl": "Configuratie toegevoegd voor apparaten\nKnippende SPAM-berichten toegevoegd bij log\nVerwijder onnodige `Debug log` optie\nOplossingen en verbeteringen",
+        "fr": "Ajout de la configuration pour les appareils\nAjout de la suppression des messages SPAM au journal\nSupprimer l'option inutile \"Journal de débogage\"\nCorrections et améliorations",
+        "it": "Aggiunta configurazione per dispositivi\nAggiunto il taglio dei messaggi SPAM nel registro\nRimuovere l'opzione \"Registro debug\" non necessaria\nCorrezioni e miglioramenti",
+        "es": "Configuración agregada para dispositivos\nSe agregaron mensajes de corte de SPAM en el registro\nEliminar la opción innecesaria `Debug log`\nCorrecciones y mejoras",
+        "pl": "Dodano konfigurację dla urządzeń\nDodano wycinanie wiadomości SPAM w logu\nUsuń niepotrzebną opcję `Dziennika debugowania`\nPoprawki i ulepszenia",
+        "zh-cn": "为设备添加了配置\n在日志中添加了切割垃圾邮件消息\n删除不必要的“调试日志”选项\n修复和改进"
+      },
       "0.3.4": {
         "en": "Fix issue getting devices from cloud and switch to RC4\nAdd devices page\nOther fixes and improvements",
         "de": "Beheben Sie das Problem beim Abrufen von Geräten aus der Cloud und wechseln Sie zu RC4\nSeite Geräte hinzufügen\nWeitere Korrekturen und Verbesserungen",
@@ -154,18 +166,6 @@
         "es": "Se agregaron clases de estados y se reescribió el código con su uso\nPágina de pestaña agregada del adaptador\nEstadísticas de dispositivos zigbee (lumi) agregadas\nMuchas mejoras de código",
         "pl": "Dodano klasy stanów i przepisano kod z ich użyciem\nDodano zakładkę adaptera\nDodano statystykę urządzeń zigbee (lumi)\nWiele ulepszeń kodu",
         "zh-cn": "添加状态类并使用它们重写代码\n增加了适配器标签页\n添加了 zigbee (lumi) 设备统计信息\n大量代码改进"
-      },
-      "0.1.0": {
-        "en": "Added support for BLE devices (needed tests)\nImprovements for zigbee and BLE support\nAdded output for debug purpose\nA lot of code improvements",
-        "de": "Unterstützung für BLE-Geräte hinzugefügt (benötigte Tests)\nVerbesserungen für Zigbee- und BLE-Unterstützung\nAusgabe für Debug-Zwecke hinzugefügt\nViele Code-Verbesserungen",
-        "ru": "Добавлена поддержка устройств BLE (необходимы тесты)\nУлучшения для поддержки zigbee и BLE\nДобавлен вывод для отладки\nМножество улучшений кода",
-        "pt": "Adicionado suporte para dispositivos BLE (testes necessários)\nMelhorias para suporte a zigbee e BLE\nAdicionada saída para fins de depuração\nMuitas melhorias de código",
-        "nl": "Ondersteuning toegevoegd voor BLE-apparaten (benodigde tests)\nVerbeteringen voor zigbee- en BLE-ondersteuning\nUitvoer toegevoegd voor foutopsporingsdoeleinden\nVeel codeverbeteringen",
-        "fr": "Ajout de la prise en charge des appareils BLE (tests nécessaires)\nAméliorations pour le support zigbee et BLE\nAjout d'une sortie à des fins de débogage\nBeaucoup d'améliorations de code",
-        "it": "Aggiunto supporto per dispositivi BLE (test necessari)\nMiglioramenti per zigbee e supporto BLE\nAggiunto output per scopi di debug\nMolti miglioramenti al codice",
-        "es": "Soporte agregado para dispositivos BLE (pruebas necesarias)\nMejoras para la compatibilidad con zigbee y BLE\nSalida agregada para fines de depuración\nMuchas mejoras de código",
-        "pl": "Dodano wsparcie dla urządzeń BLE (wymagane testy)\nUlepszenia obsługi zigbee i BLE\nDodano dane wyjściowe do celów debugowania\nWiele ulepszeń kodu",
-        "zh-cn": "添加了对 BLE 设备的支持（需要测试）\nzigbee 和 BLE 支持的改进\n添加了用于调试目的的输出\n大量代码改进"
       }
     }
   },
