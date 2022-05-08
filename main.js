@@ -53,7 +53,7 @@ class XiaomiGateway3 extends utils.Adapter {
 	    this.subscribeStates('*');
 
         /* Adapter logging options */
-        const {cutSpam, debugLog, dLogAllTheRest, dLogMQTTLumi, dLogMQTTBle} = this.config;
+        const {cutSpam, debugLogAllTheRest, debugLogMQTTLumi, debugLogMQTTBle} = this.config;
 
         /* Adapter logger */
         this.logger = {
@@ -97,30 +97,26 @@ class XiaomiGateway3 extends utils.Adapter {
                     };
                 }
             })(cutSpam),
-            'debug': ((dLog, dLogAllTheRest, ...log) => {
-                if (dLog) {
-                    const [LUMI, BLE,] = log;
+            'debug': ((debugLogAllTheRest, ...log) => {
+                const [LUMI, BLE,] = log;
 
-                    return msg => {
-                        if (typeof msg === 'string') {
-                            const logs = {LUMI, BLE};
-                            const allowed = [(msg.match(/^\([\w]+\)/g) || [''])[0].match(/[A-Z]+/g)][0];
+                return msg => {
+                    if (typeof msg === 'string') {
+                        const logs = {LUMI, BLE};
+                        const allowed = [(msg.match(/^\([\w]+\)/g) || [''])[0].match(/[A-Z]+/g)][0];
 
-                            if (allowed != undefined) {
-                                if (logs[allowed] == true)
-                                    this.log.debug(msg);
-                            } else {
-                                if (dLogAllTheRest == true)
-                                    this.log.debug(msg);
-                            }
+                        if (allowed != undefined) {
+                            if (logs[allowed] == true)
+                                this.log.debug(msg);
                         } else {
-                            this.log.debug(msg);
+                            if (debugLogAllTheRest == true)
+                                this.log.debug(msg);
                         }
-                    };
-                } else {
-                    return () => {};
-                }
-            })(debugLog, dLogAllTheRest, dLogMQTTLumi, dLogMQTTBle)
+                    } else {
+                        this.log.debug(msg);
+                    }
+                };
+            })(debugLogAllTheRest, debugLogMQTTLumi, debugLogMQTTBle)
         };
 
         /* */
