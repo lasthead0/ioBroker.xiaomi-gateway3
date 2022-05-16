@@ -608,7 +608,10 @@ class XiaomiGateway3 extends utils.Adapter {
 
             /* set state object if it is not exist or `custom` changed */
             if (_stateObject == undefined
-                || !objectEquals(stateObject.common.custom[this.namespace], _stateObject.common.custom[this.namespace])
+                || (stateObject.common.custom != undefined
+                    && _stateObject.common.custom != undefined
+                    && !objectEquals(stateObject.common.custom[this.namespace], _stateObject.common.custom[this.namespace])
+                )
             ) {
                 await this.setObjectAsync(_id, Object.assign({},
                     {'_id': `${this.namespace}.${_id}`},
