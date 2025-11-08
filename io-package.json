@@ -47,6 +47,7 @@
     "enabled": true,
     "readme": "https://github.com/lasthead0/ioBroker.xiaomi-gateway3/blob/master/README.md",
     "loglevel": "info",
+    "tier": 2,
     "mode": "daemon",
     "extIcon": "https://raw.githubusercontent.com/lasthead0/ioBroker.xiaomi-gateway3/master/admin/xiaomi-gateway3.png",
     "type": "iot-systems",
