@@ -41,7 +41,10 @@
     "dataFolder": "xiaomi-gateway3_%INSTANCE%",
     "connectionType": "local",
     "dataSource": "push",
-    "license": "MIT",
+    "licenseInformation": {
+      "type": "free",
+      "license": "MIT"
+    },
     "platform": "Javascript/Node.js",
     "icon": "xiaomi-gateway3.png",
     "enabled": true,
