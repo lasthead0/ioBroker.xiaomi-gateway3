@@ -2,7 +2,6 @@
   "common": {
     "name": "xiaomi-gateway3",
     "version": "0.3.6",
-    "title": "xiaomi-gateway3",
     "titleLang": {
       "en": "Xiaomi Gateway 3",
       "de": "Xiaomi Gateway 3",
