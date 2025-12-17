@@ -68,8 +68,7 @@
         "pl": "Gateway 3",
         "zh-cn": "Gateway 3"
       },
-      "link": "",
-      "fa-icon": "</i><img style='width: 20px; margin-bottom: -4px;' src='/adapter/xiaomi-gateway3/xiaomi-gateway3.png'><i>"
+      "link": ""
     },
     "messagebox": true,
     "globalDependencies": [
