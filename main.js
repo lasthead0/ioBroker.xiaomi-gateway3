@@ -4,9 +4,9 @@
 const utils = require('@iobroker/adapter-core');
 const {isArray, isObject} = require('./lib/tools');
 /* */
-const fs = require('fs');
-const path = require('path');
-const crypto = require('crypto');
+const fs = require('node:fs');
+const path = require('node:path');
+const crypto = require('node:crypto');
 const mqtt = require('mqtt');
 const format = require('date-fns/format');
 /* */
