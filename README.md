@@ -315,6 +315,8 @@ _**Attantion:** You should to keep in mind this is not really statistic of zigbe
 ### 0.0.1-alpha.0 (2021-10-13)
 * (Evgenii Abramov) Initial release
 
+[Older changelogs can be found there](CHANGELOG_OLD.md)
+
 ## License
 MIT License
 
