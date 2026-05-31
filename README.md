@@ -271,6 +271,10 @@ _**Attantion:** You should to keep in mind this is not really statistic of zigbe
     Placeholder for the next version (at the beginning of the line):
     ### **WORK IN PROGRESS**
 -->
+
+### **WORK IN PROGRESS**
+- (ioBroker-Bot) Adapter requires js-controller >= 6.0.11 now.
+
 ### 0.3.6 (2022-06-14)
 * Fixes and improvements
 

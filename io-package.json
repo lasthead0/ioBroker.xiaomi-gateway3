@@ -51,7 +51,6 @@
     "extIcon": "https://raw.githubusercontent.com/lasthead0/ioBroker.xiaomi-gateway3/master/admin/xiaomi-gateway3.png",
     "type": "iot-systems",
     "compact": true,
-    "materialize": true,
     "materializeTab": true,
     "adminTab": {
       "ignoreConfigUpdate": true,
@@ -79,7 +78,7 @@
     ],
     "dependencies": [
       {
-        "js-controller": ">=2.0.0"
+        "js-controller": ">=6.0.11"
       }
     ],
     "news": {
@@ -167,6 +166,9 @@
         "pl": "Ulepszone rejestrowanie adapterów",
         "zh-cn": "改进的适配器日志记录"
       }
+    },
+    "adminUI": {
+      "config": "materialize"
     }
   },
   "native": {
